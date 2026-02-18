@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:version='2' class='v2' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0' name='viewport'/>
+  <title><data:blog.pageTitle/></title>
+  
+  <!-- Dynamic Favicon (Trophy Icon) -->
+  <link href='data:image/svg+xml,%3Csvg xmlns=&apos;http://www.w3.org/2000/svg&apos; viewBox=&apos;0 0 24 24&apos; fill=&apos;none&apos; stroke=&apos;%23d97706&apos; stroke-width=&apos;2&apos; stroke-linecap=&apos;round&apos; stroke-linejoin=&apos;round&apos;%3E%3Cpath d=&apos;M6 9H4.5a2.5 2.5 0 0 1 0-5H6&apos;/%3E%3Cpath d=&apos;M18 9h1.5a2.5 2.5 0 0 0 0-5H18&apos;/%3E%3Cpath d=&apos;M4 22h16&apos;/%3E%3Cpath d=&apos;M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22&apos;/%3E%3Cpath d=&apos;M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22&apos;/%3E%3Cpath d=&apos;M18 2H6v7a6 6 0 0 0 12 0V2Z&apos;/%3E%3C/svg%3E' rel='icon'/>
+
+  <!-- Required Blogger Skin -->
+  <b:skin><![CDATA[
+    body { margin: 0; padding: 0; overflow: hidden; background: #f8fafc; -webkit-tap-highlight-color: transparent; }
+    
+    /* HIDE BLOGGER DEFAULT ELEMENTS */
+    #navbar-iframe { display: none !important; }
+    .Header { display: none !important; }
+    header.header { display: none !important; }
+    .content-inner > .header { display: none !important; }
+    .widget h2.title { display: none !important; }
+    h1.title { display: none !important; }
+    .titlewrapper { display: none !important; }
+    .descriptionwrapper { display: none !important; }
+    
+    /* Mobile specific hiding */
+    #mobile-header { display: none !important; }
+    .mobile-header-bar { display: none !important; }
+    .mobile-index-title { display: none !important; }
+    
+    /* Reset Widget padding */
+    .widget-content { padding: 0 !important; margin: 0 !important; }
+    .section { margin: 0 !important; padding: 0 !important; }
+  ]]></b:skin>
+
+  <!-- Dependencies -->
+  <script src='https://cdn.tailwindcss.com'/>
+  <!-- Configure Tailwind for Dark Mode -->
+  <script>
+    tailwind.config = {
+      darkMode: &#39;class&#39;,
+    }
+  </script>
+  <link href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css' rel='stylesheet'/>
+  <script crossorigin='anonymous' src='https://unpkg.com/react@18/umd/react.production.min.js'/>
+  <script crossorigin='anonymous' src='https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'/>
+  <script src='https://unpkg.com/@babel/standalone/babel.min.js'/>
+  <script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'/>
+
+  <!-- Fonts -->
+  <link href='https://fonts.googleapis.com' rel='preconnect'/>
+  <link crossorigin='anonymous' href='https://fonts.gstatic.com' rel='preconnect'/>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Playfair+Display:wght@600;700;800&amp;display=swap' rel='stylesheet'/>
+
+  <style>
+    #root {
+        height: 100vh; /* Fallback */
+        height: 100dvh; /* Dynamic viewport height for mobile browsers */
+        width: 100vw;
+        font-family: &#39;Inter&#39;, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .leaflet-pane { z-index: 0 !important; }
+    .leaflet-control { z-index: 10 !important; }
+    .leaflet-top, .leaflet-bottom { z-index: 1000 !important; }
+    
+    /* Smooth transitions */
+    .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; }
+    
+    /* Dark Mode Map Filter */
+    .dark-map-tiles .leaflet-tile {
+        filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+    }
+
+    /* Elegant Popup Styling */
+    .leaflet-popup-content-wrapper {
+        border-radius: 1rem !important;
+        padding: 0 !important;
+        overflow: hidden;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+        background: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    .dark .leaflet-popup-content-wrapper {
+        background: rgba(15, 23, 42, 0.98) !important; /* Slate-900 */
+        color: #e2e8f0 !important;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .leaflet-popup-content {
+        margin: 0 !important;
+        width: 260px !important;
+        line-height: 1.5;
+    }
+    .leaflet-popup-tip {
+        background: rgba(255, 255, 255, 0.98) !important;
+    }
+    .dark .leaflet-popup-tip {
+        background: rgba(15, 23, 42, 0.98) !important;
+    }
+    .leaflet-container a.leaflet-popup-close-button {
+        color: #64748b !important;
+        top: 12px !important;
+        right: 12px !important;
+        font-size: 18px !important;
+        padding: 0 !important;
+        width: 24px !important;
+        height: 24px !important;
+        background: rgba(0,0,0,0.05);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+    .dark .leaflet-container a.leaflet-popup-close-button {
+        color: #94a3b8 !important;
+        background: rgba(255,255,255,0.1);
+    }
+  </style>
+</head>
+<body>
+  
+  <b:section id='main' showaddelement='yes'>
+    <b:widget id='HTML1' locked='false' mobile='yes' title='Sports App' type='HTML' version='1'>
+      <b:widget-settings>
+        <b:widget-setting name='content'/>
+      </b:widget-settings>
+      <b:includable id='main'>
+        
+        <div id='root'/>
+
+        <script type='text/babel'>
+        //<![CDATA[
+            const { useState, useEffect, useRef, useMemo } = React;
+
+            // ==========================================
+            //  USER CONFIGURATION - EDIT TOURNAMENTS HERE
+            // ==========================================
+            const allSportsData = {
+                Chess: [
+                    { id: 101, name: "Playu International Open", location: "Chennai, TN", type: "International", date: "Feb 15, 2026", regClose: "Feb 10, 2026", coords: [13.0827, 80.2707], prize: "₹3L", url: "https://aicf.in" },
+                    { id: 102, name: "National Senior Champ", location: "Lucknow, UP", type: "National", date: "Aug 16, 2026", regClose: "Aug 01, 2026", coords: [26.8467, 80.9462], prize: "Title", url: "https://aicf.in" },
+                    { id: 103, name: "Mumbai Mayor's Cup", location: "Mumbai, MH", type: "International", date: "May 02, 2026", regClose: "Apr 25, 2026", coords: [19.0760, 72.8777], prize: "₹30L", url: "https://mumbaicitychess.com" },
+                    { id: 104, name: "Delhi International", location: "New Delhi", type: "International", date: "Jan 09, 2027", regClose: "Dec 31, 2026", coords: [28.6139, 77.2090], prize: "₹1.1Cr", url: "https://delhichess.com" },
+                    { id: 105, name: "National U-9", location: "Jamshedpur, JH", type: "National", date: "Jul 05, 2026", regClose: "Jun 20, 2026", coords: [22.8046, 86.2029], prize: "Title", url: "https://aicf.in" },
+                    { id: 106, name: "TN State U-7", location: "Coimbatore, TN", type: "State", date: "Apr 04, 2026", regClose: "Mar 28, 2026", coords: [11.0168, 76.9558], prize: "State Title", url: "https://tamilnaduchess.com" },
+                ],
+                Cricket: [
+                    { id: 201, name: "IPL Final 2026", location: "Ahmedabad, GJ", type: "League", date: "May 26, 2026", regClose: "Sold Out", coords: [23.0904, 72.5975], prize: "Trophy", url: "https://www.iplt20.com" },
+                    { id: 202, name: "IND vs ENG Test", location: "Chennai, TN", type: "International", date: "Feb 20, 2026", regClose: "Feb 18, 2026", coords: [13.0630, 80.2825], prize: "Bilateral", url: "https://www.bcci.tv" },
+                    { id: 203, name: "Ranji Trophy Final", location: "Mumbai, MH", type: "National", date: "Mar 10, 2026", regClose: "N/A", coords: [18.9389, 72.8258], prize: "Ranji Trophy", url: "https://www.bcci.tv" },
+                    { id: 204, name: "IPL Match (RCB Home)", location: "Bangalore, KA", type: "League", date: "Apr 15, 2026", regClose: "Apr 10, 2026", coords: [12.9784, 77.5994], prize: "Points", url: "https://www.royalchallengers.com" },
+                    { id: 205, name: "Syed Mushtaq Ali T20", location: "Kolkata, WB", type: "National", date: "Nov 05, 2026", regClose: "Oct 25, 2026", coords: [22.5646, 88.3433], prize: "Trophy", url: "https://www.bcci.tv" },
+                ],
+                Football: [
+                    { id: 301, name: "ISL Final 2026", location: "Goa", type: "League", date: "Mar 18, 2026", regClose: "Mar 15, 2026", coords: [15.2993, 73.9600], prize: "ISL Shield", url: "https://www.indiansuperleague.com" },
+                    { id: 302, name: "Durand Cup Final", location: "Kolkata, WB", type: "National", date: "Sep 03, 2026", regClose: "Aug 28, 2026", coords: [22.5726, 88.4100], prize: "Oldest Cup", url: "https://durandcup.in" },
+                    { id: 303, name: "Santosh Trophy", location: "Itanagar, AR", type: "National", date: "Jan 10, 2027", regClose: "Dec 25, 2026", coords: [27.0844, 93.6053], prize: "State Title", url: "https://www.the-aiff.com" },
+                    { id: 304, name: "Kerala Blasters Home", location: "Kochi, KL", type: "League", date: "Oct 20, 2026", regClose: "Oct 15, 2026", coords: [9.9312, 76.2673], prize: "ISL Match", url: "https://keralablastersfc.in" },
+                ],
+                Kabaddi: [
+                    { id: 401, name: "PKL Season 12 Opener", location: "Hyderabad, TS", type: "League", date: "Oct 07, 2026", regClose: "Oct 01, 2026", coords: [17.3850, 78.4867], prize: "Season Start", url: "https://www.prokabaddi.com" },
+                    { id: 402, name: "Senior National Kabaddi", location: "Patna, BR", type: "National", date: "Dec 15, 2026", regClose: "Dec 01, 2026", coords: [25.5941, 85.1376], prize: "National Title", url: "https://indiankabaddi.org" },
+                    { id: 403, name: "PKL Playoffs", location: "Pune, MH", type: "League", date: "Dec 28, 2026", regClose: "Dec 20, 2026", coords: [18.5204, 73.8567], prize: "Semi-Finals", url: "https://www.prokabaddi.com" },
+                ],
+                Badminton: [
+                    { id: 501, name: "India Open (Super 750)", location: "New Delhi", type: "International", date: "Jan 14, 2027", regClose: "Dec 15, 2026", coords: [28.5677, 77.2433], prize: "$850,000", url: "https://bwfbadminton.com" },
+                    { id: 502, name: "Syed Modi International", location: "Lucknow, UP", type: "International", date: "Nov 26, 2026", regClose: "Oct 20, 2026", coords: [26.8467, 80.9462], prize: "$150,000", url: "https://bwfbadminton.com" },
+                    { id: 503, name: "Senior National Champ", location: "Guwahati, AS", type: "National", date: "Dec 18, 2026", regClose: "Nov 30, 2026", coords: [26.1445, 91.7362], prize: "National Title", url: "https://www.badmintonindia.org" },
+                ],
+                Tennis: [
+                    { id: 601, name: "Tata Open Maharashtra", location: "Pune, MH", type: "International", date: "Feb 02, 2026", regClose: "Jan 10, 2026", coords: [18.5590, 73.7868], prize: "ATP 250", url: "https://www.maharashtraopen.com" },
+                    { id: 602, name: "Bangalore Challenger", location: "Bangalore, KA", type: "International", date: "Feb 12, 2026", regClose: "Jan 20, 2026", coords: [12.9716, 77.5946], prize: "ATP Challenger", url: "https://www.atptour.com" },
+                    { id: 603, name: "Fenesta Nationals", location: "New Delhi", type: "National", date: "Oct 05, 2026", regClose: "Sep 15, 2026", coords: [28.5562, 77.1970], prize: "Hard Court", url: "https://www.aitatennis.com" },
+                ],
+                Wrestling: [
+                    { id: 701, name: "Senior National Wrestling", location: "Noida, UP", type: "National", date: "Dec 20, 2026", regClose: "Dec 05, 2026", coords: [28.5355, 77.3910], prize: "Selection", url: "https://wrestlingfederationofindia.org" },
+                    { id: 702, name: "Asian Championship Trials", location: "Sonipat, HR", type: "National", date: "Mar 15, 2026", regClose: "Mar 01, 2026", coords: [28.9931, 77.0151], prize: "India Team", url: "https://wrestlingfederationofindia.org" },
+                ],
+                Marathon: [
+                    { id: 801, name: "Tata Mumbai Marathon", location: "Mumbai, MH", type: "International", date: "Jan 18, 2026", regClose: "Nov 30, 2025", coords: [18.9322, 72.8264], prize: "$405,000", url: "https://tatamumbaimarathon.procam.in/" },
+                    { id: 802, name: "New Delhi Marathon", location: "New Delhi", type: "National", date: "Feb 22, 2026", regClose: "Jan 15, 2026", coords: [28.6139, 77.2090], prize: "₹20L", url: "https://newdelhimarathon.com/" },
+                    { id: 803, name: "TCS World 10K", location: "Bangalore, KA", type: "International", date: "May 17, 2026", regClose: "Apr 20, 2026", coords: [12.9716, 77.5946], prize: "$213,000", url: "https://tcsworld10k.procam.in/" },
+                    { id: 804, name: "Vedanta Delhi Half Marathon", location: "New Delhi", type: "International", date: "Oct 18, 2026", regClose: "Sep 20, 2026", coords: [28.5828, 77.2344], prize: "$268,000", url: "https://vedantadelhihalfmarathon.procam.in/" },
+                    { id: 805, name: "Tata Steel Kolkata 25K", location: "Kolkata, WB", type: "International", date: "Dec 20, 2026", regClose: "Nov 15, 2026", coords: [22.5626, 88.3630], prize: "$100,000", url: "https://tatasteelkolkata25k.procam.in/" },
+                ]
+            };
+            // ==========================================
+            //  END USER CONFIGURATION
+            // ==========================================
+
+            // --- ICONS ---
+            const Icons = {
+                Calendar: ({ size = 12, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>),
+                MapPin: ({ size = 12, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>),
+                Trophy: ({ size = 12, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>),
+                Navigation: ({ size = 12, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>),
+                Info: ({ size = 24, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>),
+                Search: ({ size = 14, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>),
+                ExternalLink: ({ size = 10, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>),
+                Sun: ({ size = 20, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>),
+                Moon: ({ size = 20, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>),
+                List: ({ size = 20, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>),
+                Map: ({ size = 20, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>),
+                Mail: ({ size = 20, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>),
+                X: ({ size = 20, className = "" }) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>),
+                
+                // --- CUSTOM MINIMALIST SPORT ICONS ---
+                
+                // Chess: Rook/Castle (Based on your image)
+                Chess: ({size=20}) => (
+                    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        {/* Base */}
+                        <path d="M5 21h14" />
+                        <path d="M6 21v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" />
+                        {/* Body */}
+                        <path d="M10 17l1-7h2l1 7" />
+                        {/* Head */}
+                        <path d="M8 10h8V6H8v4z" />
+                        {/* Crenellations (Top notches) */}
+                        <path d="M8 6V3h2v3h4V3h2v3" />
+                    </svg>
+                ),
+                
+                // Cricket: Wicket & Bails
+                Cricket: ({size=20}) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 21V9"/><path d="M12 21V9"/><path d="M18 21V9"/><path d="M6 6l4-2"/><path d="M14 4l4 2"/><circle cx="12" cy="5" r="1" fill="currentColor"/></svg>),
+                
+                // Football: Classic Soccer Ball
+                Football: ({size=20}) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16l-4-3 1.5-5h5l1.5 5z"/><path d="M8 13l-4 2"/><path d="M16 13l4 2"/><path d="M12 16v4"/><path d="M9.5 8L6 5"/><path d="M14.5 8L18 5"/></svg>),
+                
+                // Badminton: Shuttlecock
+                Badminton: ({size=20}) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21c-1.5 0-3-1.5-3-3.5h6c0 2-1.5 3.5-3 3.5z"/><path d="M9 17.5L5 4l7 2 7-2-4 13.5"/><path d="M12 6v11.5"/><path d="M9 17.5l1-7"/><path d="M15 17.5l-1-7"/></svg>),
+                
+                // Tennis: Racket and Ball
+                Tennis: ({size=20}) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9a10 10 0 0 1 0 14.2"/><path d="M19.1 4.9a10 10 0 0 0 0 14.2"/></svg>),
+                
+                // Wrestling: Grappling Figures
+                Wrestling: ({size=20}) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm6 2h-4c-2.4 0-4.5 1.5-5.3 3.6L2 22h3l1.8-6.1c.3-.8 1-1.4 1.9-1.4h6.6c.9 0 1.6.6 1.9 1.4L19 22h3l-2.7-5.4c-.8-2.1-2.9-3.6-5.3-3.6z"/></svg>),
+                
+                // Kabaddi: Raider being caught by Defender (Ankle Hold)
+                Kabaddi: ({size=20}) => (
+                    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        {/* The Mid-line / Baulk Line */}
+                        <path d="M15 3L9 21" strokeOpacity="0.5" />
+                        
+                        {/* Left Figure (Defender - Crouching/Pulling) */}
+                        <circle cx="5" cy="14" r="2" />
+                        <path d="M5 16v3l-2 2" /> {/* Legs planted */}
+                        <path d="M5 16l5-3" />    {/* Arm reaching out to grab */}
+
+                        {/* Right Figure (Raider - Falling/Diving) */}
+                        <circle cx="19" cy="8" r="2" />
+                        <path d="M18 10l-4 3" />   {/* Torso leaning over */}
+                        <path d="M14 13l-4 0" />   {/* Leg being held (connects to defender's arm) */}
+                        <path d="M14 13l1 4" />    {/* Other leg in air */}
+                    </svg>
+                ),
+                
+                // Marathon: Fast Runner with Speed Lines
+                Marathon: ({size=20}) => (
+                    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        {/* Speed Lines (Left side) */}
+                        <path d="M2 14h5" />
+                        <path d="M3 17h4" />
+                        <path d="M4 11h3" />
+
+                        {/* The Runner (Leaning forward) */}
+                        <circle cx="16" cy="6" r="2.5" />
+                        <path d="M16 9l-3 5" />      {/* Torso */}
+                        <path d="M13 14l3 4 3-1" />  {/* Front Leg running */}
+                        <path d="M13 14l-3 4" />     {/* Back Leg push off */}
+                        <path d="M15 10l3 2" />      {/* Front Arm */}
+                        <path d="M15 10l-3 2" />      {/* Back Arm */}
+                    </svg>
+                ),
+            };
+
+            // Helper for distance calculation (Haversine Formula)
+            const calculateDistance = (lat1, lon1, lat2, lon2) => {
+                const R = 6371; // Radius of the earth in km
+                const dLat = (lat2 - lat1) * Math.PI / 180;
+                const dLon = (lon2 - lon1) * Math.PI / 180;
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                          Math.sin(dLon/2) * Math.sin(dLon/2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return R * c; // Distance in km
+            };
+
+            const INDIA_CENTER = [22.5937, 78.9629];
+
+            const FilterButton = ({ active, label, onClick, count, colorClass }) => (
+                <button
+                    onClick={onClick}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border flex items-center whitespace-nowrap ${
+                        active
+                            ? `${colorClass} text-white border-transparent shadow-md ring-2 ring-offset-1 ring-${colorClass.replace('bg-', '')}`
+                            : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-300'
+                    }`}
+                >
+                    {label} <span className={`ml-1.5 text-[10px] ${active ? 'text-white/80' : 'text-slate-400 dark:text-slate-500'}`}>({count})</span>
+                </button>
+            );
+
+            const SportSelector = ({ current, onSelect }) => (
+                <div className="flex overflow-x-auto no-scrollbar space-x-2 p-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20">
+                    {Object.keys(allSportsData).map(sport => {
+                        const Icon = Icons[sport];
+                        const isActive = current === sport;
+                        return (
+                            <button 
+                                key={sport} 
+                                onClick={() => onSelect(sport)}
+                                className={`flex flex-col items-center min-w-[56px] p-1.5 rounded-xl transition-all duration-300 ${isActive ? 'bg-blue-50 dark:bg-blue-900/20 scale-105' : 'hover:bg-slate-50 dark:hover:bg-slate-800 opacity-70 hover:opacity-100'}`}
+                            >
+                                <div className={`p-1.5 rounded-lg mb-1 transition-colors ${isActive ? 'bg-white dark:bg-slate-800 shadow-sm text-blue-600 dark:text-blue-400' : 'bg-transparent text-slate-500 dark:text-slate-400'}`}>
+                                    <Icon size={24} />
+                                </div>
+                                <span className={`text-[9px] font-bold tracking-wide ${isActive ? 'text-blue-800 dark:text-blue-300' : 'text-slate-500 dark:text-slate-400'}`}>{sport}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+            );
+
+            const TournamentCard = ({ tournament, isActive, onClick }) => (
+                <div
+                    onClick={onClick}
+                    className={`p-4 rounded-2xl cursor-pointer border transition-all duration-300 relative group ${
+                        isActive
+                            ? 'bg-blue-50/50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 shadow-md ring-1 ring-blue-100 dark:ring-blue-800'
+                            : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-blue-100 dark:hover:border-slate-600 hover:shadow-lg'
+                    }`}
+                >
+                    <div className="flex justify-between items-start mb-3">
+                        <h3 className={`font-bold text-sm leading-snug ${isActive ? 'text-blue-900 dark:text-blue-300' : 'text-slate-800 dark:text-slate-200'} pr-16`}>
+                            {tournament.name}
+                        </h3>
+                        <span className={`text-[9px] px-2 py-1 rounded-full uppercase tracking-wider font-bold ml-2 shrink-0 ${
+                            tournament.type === 'National' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' :
+                            tournament.type === 'International' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' :
+                            tournament.type === 'State' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
+                            'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                        }`}>
+                            {tournament.type}
+                        </span>
+                    </div>
+                    
+                    <div className="space-y-2 mb-4">
+                        <div className="flex items-center text-xs text-slate-600 dark:text-slate-400">
+                            <Icons.MapPin size={14} className={`mr-2 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
+                            {tournament.location}
+                            {tournament.distance && (
+                                <span className="ml-2 font-semibold text-blue-600 dark:text-blue-400">
+                                    • {Math.round(tournament.distance)} km away
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex items-center text-xs text-slate-600 dark:text-slate-400">
+                            <Icons.Calendar size={14} className={`mr-2 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
+                            {tournament.date}
+                        </div>
+                        {tournament.regClose && (
+                            <div className="flex items-center text-xs text-red-600 dark:text-red-400 font-medium">
+                                <span className="w-4 flex justify-center mr-2">⏳</span>
+                                Last Date: {tournament.regClose}
+                            </div>
+                        )}
+                        <div className="flex items-center text-xs text-slate-600 dark:text-slate-400">
+                            <Icons.Trophy size={14} className={`mr-2 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
+                            {tournament.prize}
+                        </div>
+                    </div>
+
+                    <a
+                        href={tournament.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className={`w-full flex items-center justify-center py-2 px-3 rounded-xl text-xs font-semibold transition-all duration-200 border ${isActive 
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-200 dark:shadow-none hover:bg-blue-700' 
+                                : 'bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-700 hover:border-blue-200 dark:hover:border-slate-500 hover:text-blue-600 dark:hover:text-white hover:shadow-sm'}`}
+                    >
+                        <span>Register / Details</span>
+                        <Icons.ExternalLink size={10} className="ml-1.5" />
+                    </a>
+                </div>
+            );
+
+            function App() {
+                const mapContainerRef = useRef(null);
+                const mapInstanceRef = useRef(null);
+                const markersRef = useRef({});
+                
+                const [isDark, setIsDark] = useState(false);
+                const [activeSport, setActiveSport] = useState('Chess');
+                const [selectedId, setSelectedId] = useState(null);
+                const [filterType, setFilterType] = useState('All');
+                const [searchTerm, setSearchTerm] = useState('');
+                const [isMapReady, setIsMapReady] = useState(false);
+                const [mobileView, setMobileView] = useState('list'); // 'list' or 'map'
+                const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+                const [userLocation, setUserLocation] = useState(null);
+
+                // Initial Setup: Leaflet Ready & User Location
+                useEffect(() => {
+                    if (window.L) setIsMapReady(true);
+
+                    // Ask for location permission immediately
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                setUserLocation([position.coords.latitude, position.coords.longitude]);
+                            },
+                            (error) => {
+                                console.log("Location access denied or error:", error);
+                            }
+                        );
+                    }
+                }, []);
+
+                const toggleTheme = () => setIsDark(!isDark);
+
+                // Sort Tournaments Logic
+                const sortedTournaments = useMemo(() => {
+                    let data = allSportsData[activeSport];
+                    
+                    // First filter
+                    data = data.filter(t => 
+                        (filterType === 'All' || t.type === filterType) &&
+                        (t.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         t.location.toLowerCase().includes(searchTerm.toLowerCase()))
+                    );
+
+                    // Then calculate distance and sort if user location is known
+                    if (userLocation) {
+                        data = data.map(t => {
+                            const dist = calculateDistance(userLocation[0], userLocation[1], t.coords[0], t.coords[1]);
+                            return { ...t, distance: dist };
+                        }).sort((a, b) => a.distance - b.distance);
+                    }
+
+                    return data;
+                }, [activeSport, filterType, searchTerm, userLocation]);
+
+
+                // Leaflet Map Resize Fix for Mobile when switching views
+                useEffect(() => {
+                    if (mobileView === 'map' && mapInstanceRef.current) {
+                        setTimeout(() => {
+                            mapInstanceRef.current.invalidateSize();
+                        }, 100);
+                    }
+                }, [mobileView]);
+
+                useEffect(() => {
+                    if (!isMapReady || !mapContainerRef.current) return;
+
+                    if (!mapInstanceRef.current) {
+                        const L = window.L;
+                        const map = L.map(mapContainerRef.current, { 
+                            zoomControl: false,
+                            minZoom: 4, 
+                            maxBounds: [[5.0, 60.0], [38.0, 100.0]], 
+                            maxBoundsViscosity: 1.0 
+                        }).setView(INDIA_CENTER, 5);
+                        
+                        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                            attribution: '© OpenStreetMap', subdomains: 'abcd', maxZoom: 19
+                        }).addTo(map);
+                        
+                        // MOVE ZOOM CONTROL TO TOP-RIGHT
+                        L.control.zoom({ position: 'topright' }).addTo(map);
+                        mapInstanceRef.current = map;
+                    }
+
+                    const L = window.L;
+                    const map = mapInstanceRef.current;
+
+                    Object.values(markersRef.current).forEach(marker => marker.remove());
+                    markersRef.current = {};
+
+                    sortedTournaments.forEach(t => {
+                        const color = t.type === 'National' ? '#9333ea' : t.type === 'International' ? '#ea580c' : '#3b82f6';
+                        const svg = `
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${color}" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0px 2px 2px rgba(0,0,0,0.3))">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3" fill="white"></circle>
+                            </svg>
+                        `;
+                        const icon = L.divIcon({
+                            html: svg,
+                            className: 'custom-marker',
+                            iconSize: [36, 36],
+                            iconAnchor: [18, 36],
+                            popupAnchor: [0, -38]
+                        });
+
+                        const marker = L.marker(t.coords, { icon })
+                            .addTo(map)
+                            .bindPopup(`
+                                <div class="group p-4 w-full">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${t.type === 'National' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : t.type === 'International' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}">
+                                            ${t.type}
+                                        </span>
+                                    </div>
+                                    <h3 class="font-bold text-sm text-slate-800 dark:text-slate-100 leading-tight mb-2">${t.name}</h3>
+                                    <div class="space-y-1.5 mb-3">
+                                        <div class="flex items-center text-xs text-slate-600 dark:text-slate-400">
+                                            <span class="w-4 flex justify-center mr-1">📍</span> ${t.location}
+                                        </div>
+                                        <div class="flex items-center text-xs text-slate-600 dark:text-slate-400">
+                                            <span class="w-4 flex justify-center mr-1">📅</span> ${t.date}
+                                        </div>
+                                        ${t.regClose ? 
+                                        `<div class="flex items-center text-xs text-red-600 dark:text-red-400 font-medium">
+                                            <span class="w-4 flex justify-center mr-1">⏳</span> Last Date: ${t.regClose}
+                                        </div>` : ''}
+                                        <div class="flex items-center text-xs text-slate-600 dark:text-slate-400">
+                                            <span class="w-4 flex justify-center mr-1">🏆</span> ${t.prize}
+                                        </div>
+                                    </div>
+                                    <a href="${t.url}" target="_blank" class="block w-full !bg-blue-600 dark:!bg-blue-600 !text-white dark:!text-white text-center text-xs font-semibold py-2 rounded-lg hover:opacity-90 transition-opacity">
+                                        Register / Info
+                                    </a>
+                                </div>
+                            `);
+                        
+                        marker.on('click', () => {
+                            setSelectedId(t.id);
+                            map.flyTo(t.coords, 8, { duration: 1.2, easeLinearity: 0.25 });
+                            marker.openPopup(); // FORCE POPUP OPEN ON CLICK FOR MOBILE
+                        });
+
+                        markersRef.current[t.id] = marker;
+                    });
+
+                }, [isMapReady, sortedTournaments, activeSport]);
+
+                const handleTournamentClick = (t) => {
+                    setSelectedId(t.id);
+                    setMobileView('map'); // Switch first
+                    
+                    // Delay flyTo to ensure map container has resized and invalidated size
+                    setTimeout(() => {
+                        if (mapInstanceRef.current) {
+                            mapInstanceRef.current.flyTo(t.coords, 8, { duration: 1.2, easeLinearity: 0.25 });
+                            
+                            const marker = markersRef.current[t.id];
+                            if (marker) {
+                                marker.openPopup();
+                            }
+                        }
+                    }, 300);
+                };
+
+                const handleResetMap = () => {
+                    setSelectedId(null);
+                    if (mapInstanceRef.current) {
+                        mapInstanceRef.current.flyTo(INDIA_CENTER, 5, { duration: 1.2 });
+                        mapInstanceRef.current.closePopup();
+                    }
+                };
+
+                // Wrapper div to apply the 'dark' class
+                return (
+                    <div className={isDark ? "dark h-full w-full" : "h-full w-full"}>
+                        <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans overflow-hidden transition-colors duration-300">
+                            
+                            {/* Header */}
+                            <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 px-3 py-2 md:px-6 md:py-4 flex justify-between items-center shadow-sm z-30 relative transition-colors duration-300">
+                                
+                                {/* Left Side: Title */}
+                                <div className={`flex items-center space-x-2 md:space-x-4 ${isMobileSearchOpen ? 'hidden md:flex' : 'flex'}`}>
+                                    <div className="bg-gradient-to-br from-amber-500 to-yellow-600 p-2 md:p-2.5 rounded-xl shadow-lg shadow-amber-200/50 dark:shadow-none text-white ring-1 ring-amber-400/50">
+                                        <Icons.Trophy size={20} className="md:w-6 md:h-6" />
+                                    </div>
+                                    <div>
+                                        <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight font-serif" style={{ fontFamily: '"Playfair Display", serif' }}>
+                                            Tournaments Map
+                                        </h1>
+                                        <div className="flex items-center mt-0.5 gap-2">
+                                            <span className="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-widest uppercase">{activeSport}</span>
+                                            <div className="flex items-center">
+                                                <span className="relative flex h-2 w-2 mr-1.5">
+                                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                                </span>
+                                                <span className="text-[9px] md:text-[10px] text-green-600 dark:text-green-400 font-bold tracking-widest uppercase">Live Updates</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right Side: Search & Actions */}
+                                <div className={`flex items-center space-x-2 ${isMobileSearchOpen ? 'w-full' : ''}`}>
+                                    
+                                    {/* Mobile Search Expanded */}
+                                    {isMobileSearchOpen && (
+                                        <div className="flex flex-1 items-center bg-slate-100 dark:bg-slate-800 rounded-xl px-3 py-2 md:hidden animate-in fade-in slide-in-from-right-4 duration-200">
+                                            <Icons.Search size={16} className="text-slate-400 shrink-0" />
+                                            <input 
+                                                type="text" 
+                                                placeholder="Search events..." 
+                                                autoFocus
+                                                className="w-full bg-transparent border-none text-sm font-medium text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none ml-2"
+                                                value={searchTerm} 
+                                                onChange={(e) => setSearchTerm(e.target.value)} 
+                                            />
+                                            <button 
+                                                onClick={() => { setIsMobileSearchOpen(false); setSearchTerm(''); }}
+                                                className="ml-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                                            >
+                                                <Icons.X size={18} />
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {/* Desktop Search (Always Visible) */}
+                                    <div className="relative w-64 hidden md:block">
+                                        <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400"><Icons.Search size={14} /></div>
+                                        <input type="text" placeholder="Search..." 
+                                            className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-2 pl-9 pr-2 text-xs font-medium text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 transition-all"
+                                            value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                                    </div>
+                                    
+                                    {/* Mobile Search Trigger (Only visible when closed) */}
+                                    {!isMobileSearchOpen && (
+                                        <button 
+                                            onClick={() => setIsMobileSearchOpen(true)}
+                                            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 md:hidden transition-all"
+                                        >
+                                            <Icons.Search size={18} />
+                                        </button>
+                                    )}
+
+                                    {/* Action Buttons (Hide on mobile when search is open) */}
+                                    <div className={`flex items-center space-x-2 ${isMobileSearchOpen ? 'hidden' : 'flex'}`}>
+                                        <a 
+                                            href="mailto:atulnair2003@gmail.com"
+                                            className="p-2 md:p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-all active:scale-95"
+                                            aria-label="Contact for Business"
+                                        >
+                                            <Icons.Mail size={16} />
+                                        </a>
+
+                                        <button 
+                                            onClick={toggleTheme}
+                                            className="p-2 md:p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                                            aria-label="Toggle Dark Mode"
+                                        >
+                                            {isDark ? <Icons.Sun size={16} /> : <Icons.Moon size={16} />}
+                                        </button>
+                                    </div>
+                                </div>
+                            </header>
+
+                            <div className="flex-1 flex overflow-hidden relative">
+                                
+                                {/* Sidebar */}
+                                <div className={`w-full md:w-80 lg:w-96 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col z-20 shadow-2xl shadow-slate-200/50 dark:shadow-none md:shadow-none h-full transition-colors duration-300 ${mobileView === 'map' ? 'hidden md:flex' : 'flex'}`}>
+                                    
+                                    {/* Sport Selector */}
+                                    <SportSelector current={activeSport} onSelect={setActiveSport} />
+
+                                    {/* Filters */}
+                                    <div className="px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex gap-2 overflow-x-auto no-scrollbar transition-colors">
+                                    {['All', 'National', 'International', 'League', 'State'].map(f => (
+                                        <FilterButton key={f} label={f} active={filterType === f} onClick={() => setFilterType(f)} 
+                                            count={f === 'All' ? sortedTournaments.length : sortedTournaments.filter(t => t.type === f).length} 
+                                            colorClass={f === 'National' ? 'bg-purple-600' : 'bg-blue-600'} />
+                                    ))}
+                                    </div>
+
+                                    {/* RESET VIEW BUTTON (SIDEBAR) - HIDDEN ON MOBILE */}
+                                    <div className="px-4 py-2 bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs">
+                                        <span className="font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{sortedTournaments.length} Events</span>
+                                        <button onClick={handleResetMap} className="hidden md:flex text-blue-600 dark:text-blue-400 hover:text-blue-700 font-semibold items-center transition-colors">
+                                            <span className="mr-1"><Icons.Navigation size={12} /></span> Reset View
+                                        </button>
+                                    </div>
+
+                                    <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/30 dark:bg-slate-950/30">
+                                        {sortedTournaments.length === 0 ? (
+                                            <div className="flex flex-col items-center justify-center h-48 text-center">
+                                                <div className="text-slate-300 dark:text-slate-600 mb-2"><Icons.Info size={32} /></div>
+                                                <p className="text-slate-400 dark:text-slate-500 text-sm font-medium">No events found matching your criteria.</p>
+                                                <button onClick={() => {setFilterType('All'); setSearchTerm('');}} className="mt-2 text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline">Clear all filters</button>
+                                            </div>
+                                        ) : (
+                                            sortedTournaments.map(t => (
+                                                <TournamentCard key={t.id} tournament={t} isActive={selectedId === t.id} onClick={() => handleTournamentClick(t)} />
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Map */}
+                                <div className={`flex-1 bg-slate-100 dark:bg-slate-950 relative ${isDark ? 'dark-map-tiles' : ''} ${mobileView === 'list' ? 'hidden md:block' : 'block'}`}>
+                                    <div ref={mapContainerRef} className="absolute inset-0 z-0 bg-slate-200 dark:bg-slate-800 transition-colors duration-300" />
+                                    
+                                    {/* RESET BUTTON ON MAP (Visible on Mobile) */}
+                                    <div className="absolute top-4 left-4 z-[400]">
+                                        <button 
+                                            onClick={handleResetMap}
+                                            className="bg-white/90 dark:bg-slate-800/90 backdrop-blur text-slate-600 dark:text-slate-300 p-2 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                                            title="Reset Map"
+                                        >
+                                            <Icons.Navigation size={16} />
+                                        </button>
+                                    </div>
+
+                                    <div className="absolute bottom-6 left-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 z-[400] text-xs transition-colors duration-300 hidden md:block">
+                                        <div className="font-bold mb-3 text-slate-800 dark:text-slate-200 tracking-wide uppercase text-[10px]">Map Legend</div>
+                                        <div className="space-y-2">
+                                            <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-purple-600 mr-2 shadow-sm ring-1 ring-purple-200 dark:ring-purple-900"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">National</span></div>
+                                            <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-orange-600 mr-2 shadow-sm ring-1 ring-orange-200 dark:ring-orange-900"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">International</span></div>
+                                            <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-blue-500 mr-2 shadow-sm ring-1 ring-blue-200 dark:ring-blue-900"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">State / League</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Mobile Toggle FAB */}
+                                <div className="md:hidden absolute bottom-6 right-6 z-50">
+                                    <button 
+                                        onClick={() => setMobileView(mobileView === 'list' ? 'map' : 'list')}
+                                        className="flex items-center justify-center w-14 h-14 bg-slate-900 dark:bg-blue-600 text-white rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all"
+                                    >
+                                        {mobileView === 'list' ? <Icons.Map size={24} /> : <Icons.List size={24} />}
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(<App />);
+        //]]>
+        </script>
+      </b:includable>
+    </b:widget>
+  </b:section>
+</body>
+</html>
