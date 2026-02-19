@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <title>Tournaments Map</title>
     
-    <!-- Dynamic Favicon (Trophy Icon) -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d97706' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9H4.5a2.5 2.5 0 0 1 0-5H6'/%3E%3Cpath d='M18 9h1.5a2.5 2.5 0 0 0 0-5H18'/%3E%3Cpath d='M4 22h16'/%3E%3Cpath d='M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22'/%3E%3Cpath d='M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22'/%3E%3Cpath d='M18 2H6v7a6 6 0 0 0 12 0V2Z'/%3E%3C/svg%3E" />
+    <!-- Dynamic Favicon (Trophy Icon - Blue Theme) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9H4.5a2.5 2.5 0 0 1 0-5H6'/%3E%3Cpath d='M18 9h1.5a2.5 2.5 0 0 0 0-5H18'/%3E%3Cpath d='M4 22h16'/%3E%3Cpath d='M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22'/%3E%3Cpath d='M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22'/%3E%3Cpath d='M18 2H6v7a6 6 0 0 0 12 0V2Z'/%3E%3C/svg%3E" />
 
     <!-- SEO: Canonical & Verification (UPDATE THESE) -->
     <link rel="canonical" href="https://YOUR_NETLIFY_URL.netlify.app/" />
@@ -28,7 +28,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Playfair+Display:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -127,6 +127,9 @@
             Marathon: ({size=20}) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 14h5" /><path d="M3 17h4" /><path d="M4 11h3" /><circle cx="16" cy="6" r="2.5" /><path d="M16 9l-3 5" /><path d="M13 14l3 4 3-1" /><path d="M13 14l-3 4" /><path d="M15 10l3 2" /><path d="M15 10l-3 2" /></svg>),
         };
 
+        // ==========================================
+        //  USER CONFIGURATION - EDIT TOURNAMENTS HERE
+        // ==========================================
         const allSportsData = {
             Chess: [
                 { id: 101, name: "Playu International Open", location: "Chennai, TN", type: "International", date: "Feb 15, 2026", regClose: "Feb 10, 2026", coords: [13.0827, 80.2707], prize: "₹3L", url: "https://aicf.in" },
@@ -135,38 +138,98 @@
                 { id: 104, name: "Delhi International", location: "New Delhi", type: "International", date: "Jan 09, 2027", regClose: "Dec 31, 2026", coords: [28.6139, 77.2090], prize: "₹1.1Cr", url: "https://delhichess.com" },
                 { id: 105, name: "National U-9", location: "Jamshedpur, JH", type: "National", date: "Jul 05, 2026", regClose: "Jun 20, 2026", coords: [22.8046, 86.2029], prize: "Title", url: "https://aicf.in" },
                 { id: 106, name: "TN State U-7", location: "Coimbatore, TN", type: "State", date: "Apr 04, 2026", regClose: "Mar 28, 2026", coords: [11.0168, 76.9558], prize: "State Title", url: "https://tamilnaduchess.com" },
+                { id: 107, name: "Chennai District Selection", location: "Chennai, TN", type: "District", date: "Jan 24, 2027", regClose: "Jan 20, 2027", coords: [13.0827, 80.2707], prize: "Selection", url: "https://chennaidistrictchess.com/" },
             ],
             Cricket: [
-                { id: 201, name: "IPL Final 2026", location: "Ahmedabad, GJ", type: "League", date: "May 26, 2026", regClose: "Sold Out", coords: [23.0904, 72.5975], prize: "Trophy", url: "https://www.iplt20.com" },
-                { id: 202, name: "IND vs ENG Test", location: "Chennai, TN", type: "International", date: "Feb 20, 2026", regClose: "Feb 18, 2026", coords: [13.0630, 80.2825], prize: "Bilateral", url: "https://www.bcci.tv" },
-                { id: 203, name: "Ranji Trophy Final", location: "Mumbai, MH", type: "National", date: "Mar 10, 2026", regClose: "N/A", coords: [18.9389, 72.8258], prize: "Ranji Trophy", url: "https://www.bcci.tv" },
-                { id: 204, name: "IPL Match (RCB Home)", location: "Bangalore, KA", type: "League", date: "Apr 15, 2026", regClose: "Apr 10, 2026", coords: [12.9784, 77.5994], prize: "Points", url: "https://www.royalchallengers.com" },
-                { id: 205, name: "Syed Mushtaq Ali T20", location: "Kolkata, WB", type: "National", date: "Nov 05, 2026", regClose: "Oct 25, 2026", coords: [22.5646, 88.3433], prize: "Trophy", url: "https://www.bcci.tv" },
-            ],
+    { id: 201, name: "India vs Netherlands (T20 WC)", location: "Ahmedabad, GJ", type: "International", date: "Feb 18, 2026", regClose: "Sold Out", coords: [23.0904, 72.5975], prize: "Points", url: "https://www.icc-cricket.com" },
+    { id: 202, name: "IND vs ENG Test", location: "Chennai, TN", type: "International", date: "Feb 20, 2026", regClose: "Feb 18, 2026", coords: [13.0630, 80.2825], prize: "Bilateral", url: "https://www.bcci.tv" },
+    { id: 203, name: "Col C K Nayudu Trophy Knockouts (U-23 Men)", location: "Various, India", type: "National", date: "Feb 21, 2026", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 204, name: "India vs South Africa (T20 WC)", location: "Ahmedabad, GJ", type: "International", date: "Feb 22, 2026", regClose: "Sold Out", coords: [23.0904, 72.5975], prize: "Points", url: "https://www.icc-cricket.com" },
+    { id: 205, name: "Senior Women's One Day Trophy Elite Knockouts", location: "Punjab, PB", type: "National", date: "Feb 22, 2026", regClose: "N/A", coords: [31.1471, 75.3412], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 206, name: "India vs Zimbabwe (T20 WC)", location: "Chennai, TN", type: "International", date: "Feb 26, 2026", regClose: "Sold Out", coords: [13.0630, 80.2825], prize: "Points", url: "https://www.icc-cricket.com" },
+    { id: 207, name: "India vs West Indies (T20 WC)", location: "Kolkata, WB", type: "International", date: "Mar 01, 2026", regClose: "Sold Out", coords: [22.5646, 88.3433], prize: "Points", url: "https://www.icc-cricket.com" },
+    { id: 208, name: "Vizzy Trophy (Inter-University Men)", location: "Various, India", type: "National", date: "Mar 01, 2026", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 209, name: "Women's U-23 One Day Trophy", location: "Ranchi, JH", type: "National", date: "Mar 03, 2026", regClose: "N/A", coords: [23.3441, 85.3096], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 210, name: "T20 WC Semi-Final 1", location: "Mumbai, MH", type: "International", date: "Mar 05, 2026", regClose: "Sold Out", coords: [18.9389, 72.8258], prize: "Finals Spot", url: "https://www.icc-cricket.com" },
+    { id: 211, name: "Senior Women's Interzonal One Day Trophy", location: "Bengaluru, KA", type: "National", date: "Mar 05, 2026", regClose: "N/A", coords: [12.9716, 77.5946], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 212, name: "T20 WC Final", location: "Ahmedabad, GJ", type: "International", date: "Mar 08, 2026", regClose: "Sold Out", coords: [23.0904, 72.5975], prize: "World Cup Trophy", url: "https://www.icc-cricket.com" },
+    { id: 213, name: "Ranji Trophy Final (Men's First-Class)", location: "Mumbai, MH", type: "National", date: "Mar 10, 2026", regClose: "N/A", coords: [18.9389, 72.8258], prize: "Ranji Trophy", url: "https://www.bcci.tv" },
+    { id: 214, name: "Senior Women's Interzonal Multi-Day Trophy", location: "Pondicherry, PY", type: "National", date: "Mar 20, 2026", regClose: "N/A", coords: [11.9416, 79.8083], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 215, name: "IPL Match (RCB Home)", location: "Bangalore, KA", type: "League", date: "Apr 15, 2026", regClose: "Apr 10, 2026", coords: [12.9784, 77.5994], prize: "Points", url: "https://www.royalchallengers.com" },
+    { id: 216, name: "IPL Final 2026", location: "Ahmedabad, GJ", type: "League", date: "May 26, 2026", regClose: "Sold Out", coords: [23.0904, 72.5975], prize: "Trophy", url: "https://www.iplt20.com" },
+    { id: 217, name: "India vs Afghanistan Men's Series", location: "TBD, India", type: "International", date: "Predicted to be from Jun 01, 2026 - Jun 30, 2026", regClose: "TBA", coords: [20.5937, 78.9629], prize: "Bilateral", url: "https://www.bcci.tv" },
+    { id: 218, name: "TNPL 2026 (Salem Spartans Home)", location: "Salem, TN", type: "State", date: "Jul 10, 2026", regClose: "Jul 05, 2026", coords: [11.6643, 78.1460], prize: "Points", url: "https://www.tnca.cricket" },
+    { id: 219, name: "Duleep Trophy 2026-27 (Men's)", location: "Bengaluru, KA", type: "National", date: "Predicted to be from Aug 25, 2026 - Sep 15, 2026", regClose: "N/A", coords: [12.9716, 77.5946], prize: "Duleep Trophy", url: "https://www.bcci.tv" },
+    { id: 220, name: "India vs West Indies Men's Series", location: "TBD, India", type: "International", date: "Predicted to be from Sep 15, 2026 - Oct 31, 2026", regClose: "TBA", coords: [20.5937, 78.9629], prize: "Bilateral", url: "https://www.bcci.tv" },
+    { id: 221, name: "Irani Cup 2026", location: "TBD, India", type: "National", date: "Predicted to be from Oct 01, 2026 - Oct 05, 2026", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Irani Cup", url: "https://www.bcci.tv" },
+    { id: 222, name: "Senior Women's T20 Trophy", location: "Various, India", type: "National", date: "Predicted to be from Oct 08, 2026 - Oct 31, 2026", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 223, name: "Ranji Trophy 2026-27", location: "Various, India", type: "National", date: "Predicted to be from Oct 15, 2026 - Feb 28, 2027", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Ranji Trophy", url: "https://www.bcci.tv" },
+    { id: 224, name: "Senior Women's Interzonal T20", location: "Various, India", type: "National", date: "Predicted to be from Nov 04, 2026 - Nov 14, 2026", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 225, name: "Syed Mushtaq Ali T20", location: "Kolkata, WB", type: "National", date: "Nov 05, 2026", regClose: "Oct 25, 2026", coords: [22.5646, 88.3433], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 226, name: "Cooch Behar Trophy (Men's U-19)", location: "Various, India", type: "National", date: "Predicted to be from Nov 16, 2026 - Jan 20, 2027", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 227, name: "Syed Mushtaq Ali Trophy 2026-27", location: "Various, India", type: "National", date: "Predicted to be from Nov 20, 2026 - Dec 15, 2026", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 228, name: "Women's U-23 T20 Trophy", location: "Various, India", type: "National", date: "Predicted to be from Nov 24, 2026 - Dec 11, 2026", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 229, name: "India vs Sri Lanka Men's Series", location: "TBD, India", type: "International", date: "Predicted to be from Dec 01, 2026 - Dec 31, 2026", regClose: "TBA", coords: [20.5937, 78.9629], prize: "Bilateral", url: "https://www.bcci.tv" },
+    { id: 230, name: "Vijay Merchant Trophy (Men's U-16)", location: "Various, India", type: "National", date: "Predicted to be from Dec 07, 2026 - Jan 28, 2027", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 231, name: "Women's U-19 One Day Trophy", location: "Various, India", type: "National", date: "Predicted to be from Dec 13, 2026 - Jan 01, 2027", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
+    { id: 232, name: "Vijay Hazare Trophy 2026-27 (Men's ODIs)", location: "Various, India", type: "National", date: "Predicted to be from Dec 20, 2026 - Jan 20, 2027", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Vijay Hazare Trophy", url: "https://www.bcci.tv" }
+],
             Football: [
-                { id: 301, name: "ISL Final 2026", location: "Goa", type: "League", date: "Mar 18, 2026", regClose: "Mar 15, 2026", coords: [15.2993, 73.9600], prize: "ISL Shield", url: "https://www.indiansuperleague.com" },
-                { id: 302, name: "Durand Cup Final", location: "Kolkata, WB", type: "National", date: "Sep 03, 2026", regClose: "Aug 28, 2026", coords: [22.5726, 88.4100], prize: "Oldest Cup", url: "https://durandcup.in" },
-                { id: 303, name: "Santosh Trophy", location: "Itanagar, AR", type: "National", date: "Jan 10, 2027", regClose: "Dec 25, 2026", coords: [27.0844, 93.6053], prize: "State Title", url: "https://www.the-aiff.com" },
-                { id: 304, name: "Kerala Blasters Home", location: "Kochi, KL", type: "League", date: "Oct 20, 2026", regClose: "Oct 15, 2026", coords: [9.9312, 76.2673], prize: "ISL Match", url: "https://keralablastersfc.in" },
-            ],
+    { id: 305, name: "India Cup 2026", location: "Bangalore, KA", type: "Youth International", date: "Feb 20, 2026", regClose: "Feb 10, 2026", coords: [12.9716, 77.5946], prize: "Youth Cup", url: "https://www.sporthood.in" },
+    { id: 306, name: "Indian Football League (IFL)", location: "Aizawl, MZ", type: "League", date: "Feb 27, 2026", regClose: "Feb 15, 2026", coords: [23.7271, 92.7176], prize: "IFL Title", url: "https://www.the-aiff.com" },
+    { id: 307, name: "MFA Futsal League", location: "Aizawl, MZ", type: "State", date: "Mar 10, 2026", regClose: "Feb 25, 2026", coords: [23.7271, 92.7176], prize: "State Futsal Title", url: "https://www.the-aiff.com" },
+    { id: 301, name: "ISL Final 2026", location: "Goa", type: "League", date: "Mar 18, 2026", regClose: "Mar 15, 2026", coords: [15.2993, 73.9600], prize: "ISL Shield", url: "https://www.indiansuperleague.com" },
+    { id: 308, name: "Swami Vivekananda U-20 NFC", location: "Narainpur, CG", type: "National Youth", date: "Apr 01, 2026", regClose: "Mar 15, 2026", coords: [19.7150, 81.2714], prize: "U-20 Title", url: "https://www.the-aiff.com" },
+    { id: 309, name: "PDFA Third Division", location: "Pune, MH", type: "District", date: "Apr 15, 2026", regClose: "Mar 30, 2026", coords: [18.5204, 73.8567], prize: "Division Title", url: "https://www.pdfapune.org" },
+    { id: 310, name: "DSA Senior Division League", location: "New Delhi, DL", type: "State", date: "Apr 20, 2026", regClose: "Apr 05, 2026", coords: [28.6139, 77.2090], prize: "DSA Title", url: "https://www.footballdelhi.com" },
+    { id: 311, name: "GFA U-20 Division I", location: "Mapusa, GA", type: "State Youth", date: "Apr 25, 2026", regClose: "Apr 10, 2026", coords: [15.5937, 73.8138], prize: "Youth Title", url: "https://www.goa-fa.com" },
+    { id: 312, name: "IWL Final", location: "Bhubaneswar, OD", type: "National", date: "Apr 30, 2026", regClose: "Closed", coords: [20.2961, 85.8245], prize: "IWL Trophy", url: "https://www.the-aiff.com" },
+    { id: 313, name: "Futsal Club Championship", location: "Gujarat", type: "National", date: "May 01, 2026", regClose: "Apr 15, 2026", coords: [22.2587, 71.1924], prize: "Futsal Title", url: "https://www.the-aiff.com" },
+    { id: 314, name: "18th Manipur State League", location: "Imphal, MN", type: "State", date: "May 05, 2026", regClose: "Apr 20, 2026", coords: [24.8170, 93.9368], prize: "State League", url: "https://www.amfa.in" },
+    { id: 315, name: "BDFA Men's B Division", location: "Bangalore, KA", type: "District", date: "May 10, 2026", regClose: "Apr 25, 2026", coords: [12.9716, 77.5946], prize: "Division Title", url: "https://www.ksfa.in" },
+    { id: 316, name: "AIFF Sub-Junior League", location: "Kolkata, WB", type: "National Youth", date: "May 15, 2026", regClose: "Closed", coords: [22.5726, 88.3639], prize: "Sub-Junior Title", url: "https://www.the-aiff.com" },
+    { id: 317, name: "AIFF Elite Youth League", location: "Mumbai, MH", type: "National Youth", date: "May 31, 2026", regClose: "Closed", coords: [19.0760, 72.8777], prize: "Youth League Title", url: "https://www.the-aiff.com" },
+    { id: 318, name: "Calcutta Football League", location: "Kolkata, WB", type: "State", date: "Jun 20, 2026", regClose: "Jun 05, 2026", coords: [22.5726, 88.3639], prize: "CFL Trophy", url: "https://www.ifa.in" },
+    { id: 319, name: "India-International Cup", location: "Bangalore, KA", type: "Youth International", date: "Jul 15, 2026", regClose: "Jun 30, 2026", coords: [12.9716, 77.5946], prize: "Int. Youth Cup", url: "https://www.sporthood.in" },
+    { id: 302, name: "Durand Cup Final", location: "Kolkata, WB", type: "National", date: "Sep 03, 2026", regClose: "Aug 28, 2026", coords: [22.5726, 88.4100], prize: "Oldest Cup", url: "https://durandcup.in" },
+    { id: 320, name: "ISL 2026-27 Opener", location: "Kolkata, WB", type: "League", date: "Sep 15, 2026", regClose: "Sep 01, 2026", coords: [22.5726, 88.3639], prize: "ISL Match", url: "https://www.indiansuperleague.com" },
+    { id: 321, name: "Super Cup / Fed Cup Final", location: "Kochi, KL", type: "National", date: "Sep 20, 2026", regClose: "Aug 15, 2026", coords: [9.9312, 76.2673], prize: "Super Cup", url: "https://www.the-aiff.com" },
+    { id: 322, name: "I-League 3 Kickoff", location: "Multiple", type: "League", date: "Oct 01, 2026", regClose: "Sep 15, 2026", coords: [20.5937, 78.9629], prize: "Promotion", url: "https://www.the-aiff.com" },
+    { id: 304, name: "Kerala Blasters Home", location: "Kochi, KL", type: "League", date: "Oct 20, 2026", regClose: "Oct 15, 2026", coords: [9.9312, 76.2673], prize: "ISL Match", url: "https://keralablastersfc.in" },
+    { id: 323, name: "IWL 2026-27 Kickoff", location: "Multiple", type: "National", date: "Oct 25, 2026", regClose: "Oct 10, 2026", coords: [20.5937, 78.9629], prize: "IWL Match", url: "https://www.the-aiff.com" },
+    { id: 324, name: "Kerala Premier League", location: "Kozhikode, KL", type: "State", date: "Nov 15, 2026", regClose: "Oct 30, 2026", coords: [11.2588, 75.7804], prize: "KPL Trophy", url: "https://www.keralafa.com" },
+    { id: 325, name: "Santosh Trophy Group Stage", location: "Multiple", type: "National", date: "Dec 05, 2026", regClose: "Nov 15, 2026", coords: [20.5937, 78.9629], prize: "State Group Match", url: "https://www.the-aiff.com" },
+    { id: 303, name: "Santosh Trophy", location: "Itanagar, AR", type: "National", date: "Jan 10, 2027", regClose: "Dec 25, 2026", coords: [27.0844, 93.6053], prize: "State Title", url: "https://www.the-aiff.com" }
+],
             Kabaddi: [
-                { id: 401, name: "PKL Season 12 Opener", location: "Hyderabad, TS", type: "League", date: "Oct 07, 2026", regClose: "Oct 01, 2026", coords: [17.3850, 78.4867], prize: "Season Start", url: "https://www.prokabaddi.com" },
-                { id: 402, name: "Senior National Kabaddi", location: "Patna, BR", type: "National", date: "Dec 15, 2026", regClose: "Dec 01, 2026", coords: [25.5941, 85.1376], prize: "National Title", url: "https://indiankabaddi.org" },
-                { id: 403, name: "PKL Playoffs", location: "Pune, MH", type: "League", date: "Dec 28, 2026", regClose: "Dec 20, 2026", coords: [18.5204, 73.8567], prize: "Semi-Finals", url: "https://www.prokabaddi.com" },
-            ],
+    { id: 404, name: "72nd Senior National Kabaddi Championship (Men)", location: "Vadodara, GJ", type: "National", date: "Feb 24, 2026", regClose: "Feb 10, 2026", coords: [22.3072, 73.1812], prize: "National Title", url: "https://sportvot.com" },
+    { id: 405, name: "AIU Inter-Zonal Tournaments", location: "New Delhi, DL", type: "University", date: "Feb 28, 2026", regClose: "Feb 15, 2026", coords: [28.6139, 77.2090], prize: "University Championship", url: "https://aiu.ac.in" },
+    { id: 406, name: "JBC Super League", location: "Ranchi, JH", type: "League", date: "Mar 15, 2026", regClose: "Mar 01, 2026", coords: [23.3441, 85.3096], prize: "Regional Title", url: "https://www.kabaddiadda.com" },
+    { id: 407, name: "18th National Circle Style Kabaddi", location: "Sonipat, HR", type: "National", date: "Apr 11, 2026", regClose: "Mar 25, 2026", coords: [28.9931, 77.0151], prize: "Circle Style Title", url: "https://indiankabaddi.org" },
+    { id: 408, name: "Youth Games International Championship", location: "Gorakhpur, UP", type: "International", date: "May 03, 2026", regClose: "Apr 20, 2026", coords: [26.7606, 83.3732], prize: "International Medal", url: "https://youthgamesindia.org.in" },
+    { id: 409, name: "12th National Beach Kabaddi", location: "Visakhapatnam, AP", type: "National", date: "Jun 05, 2026", regClose: "May 20, 2026", coords: [17.6868, 83.2185], prize: "Beach Title", url: "https://indiankabaddi.org" },
+    { id: 410, name: "Yuva Kabaddi Series (Summer)", location: "Pune, MH", type: "League", date: "Jun 15, 2026", regClose: "Jun 01, 2026", coords: [18.5204, 73.8567], prize: "Youth Pro Title", url: "https://www.yuvakabaddi.com" },
+    { id: 411, name: "Monsoon Invitationals", location: "Madurai, TN", type: "Local", date: "Jul 15, 2026", regClose: "Jul 05, 2026", coords: [9.9252, 78.1198], prize: "District Trophy", url: "https://www.kabaddiadda.com" },
+    { id: 401, name: "PKL Season 12 Opener", location: "Hyderabad, TS", type: "League", date: "Oct 07, 2026", regClose: "Oct 01, 2026", coords: [17.3850, 78.4867], prize: "Season Start", url: "https://www.prokabaddi.com" },
+    { id: 412, name: "35th Sub-Junior National (U-16)", location: "Rohtak, HR", type: "National", date: "Nov 15, 2026", regClose: "Nov 01, 2026", coords: [28.8955, 76.5833], prize: "Sub-Junior Title", url: "https://indiankabaddi.org" },
+    { id: 413, name: "Telangana CM Cup", location: "Maktal, TS", type: "State", date: "Nov 20, 2026", regClose: "Nov 05, 2026", coords: [16.5015, 77.5117], prize: "State Trophy", url: "https://sports.telangana.gov.in" },
+    { id: 402, name: "Senior National Kabaddi", location: "Patna, BR", type: "National", date: "Dec 15, 2026", regClose: "Dec 01, 2026", coords: [25.5941, 85.1376], prize: "National Title", url: "https://indiankabaddi.org" },
+    { id: 414, name: "52nd Junior National (Girls)", location: "Kolkata, WB", type: "National", date: "Dec 20, 2026", regClose: "Dec 05, 2026", coords: [22.5726, 88.3639], prize: "Junior Title", url: "https://indiankabaddi.org" },
+    { id: 403, name: "PKL Playoffs", location: "Pune, MH", type: "League", date: "Dec 28, 2026", regClose: "Dec 20, 2026", coords: [18.5204, 73.8567], prize: "Semi-Finals", url: "https://www.prokabaddi.com" }
+],
             Badminton: [
-                { id: 501, name: "India Open (Super 750)", location: "New Delhi", type: "International", date: "Jan 14, 2027", regClose: "Dec 15, 2026", coords: [28.5677, 77.2433], prize: "$850,000", url: "https://bwfbadminton.com" },
-                { id: 502, name: "Syed Modi International", location: "Lucknow, UP", type: "International", date: "Nov 26, 2026", regClose: "Oct 20, 2026", coords: [26.8467, 80.9462], prize: "$150,000", url: "https://bwfbadminton.com" },
+                { id: 501, name: "India Open (Super 750)", location: "New Delhi", type: "International", date: "Jan 14, 2027", regClose: "Dec 15, 2026", coords: [28.5677, 77.2433], prize: "$850,000", url: "https://bwfbadminton.com", isElite: true },
+                { id: 502, name: "Syed Modi International", location: "Lucknow, UP", type: "International", date: "Nov 26, 2026", regClose: "Oct 20, 2026", coords: [26.8467, 80.9462], prize: "$150,000", url: "https://bwfbadminton.com", isElite: true },
                 { id: 503, name: "Senior National Champ", location: "Guwahati, AS", type: "National", date: "Dec 18, 2026", regClose: "Nov 30, 2026", coords: [26.1445, 91.7362], prize: "National Title", url: "https://www.badmintonindia.org" },
             ],
             Tennis: [
-                { id: 601, name: "Tata Open Maharashtra", location: "Pune, MH", type: "International", date: "Feb 02, 2026", regClose: "Jan 10, 2026", coords: [18.5590, 73.7868], prize: "ATP 250", url: "https://www.maharashtraopen.com" },
-                { id: 602, name: "Bangalore Challenger", location: "Bangalore, KA", type: "International", date: "Feb 12, 2026", regClose: "Jan 20, 2026", coords: [12.9716, 77.5946], prize: "ATP Challenger", url: "https://www.atptour.com" },
-                { id: 603, name: "Fenesta Nationals", location: "New Delhi", type: "National", date: "Oct 05, 2026", regClose: "Sep 15, 2026", coords: [28.5562, 77.1970], prize: "Hard Court", url: "https://www.aitatennis.com" },
+                { id: 601, name: "Tata Open Maharashtra", location: "Pune, MH", type: "International", date: "Feb 02, 2026", regClose: "Jan 10, 2026", coords: [18.5590, 73.7868], prize: "ATP 250", url: "https://www.maharashtraopen.com", isElite: true },
+                { id: 602, name: "Bangalore Challenger", location: "Bangalore, KA", type: "International", date: "Feb 12, 2026", regClose: "Jan 20, 2026", coords: [12.9716, 77.5946], prize: "ATP Challenger", url: "https://www.atptour.com", isElite: true },
+                { id: 603, name: "Fenesta Nationals", location: "New Delhi", type: "National", date: "Oct 05, 2026", regClose: "Sep 15, 2026", coords: [28.5562, 77.1970], prize: "Hard Court", url: "https://www.aitatennis.com", isElite: true },
             ],
             Wrestling: [
-                { id: 701, name: "Senior National Wrestling", location: "Noida, UP", type: "National", date: "Dec 20, 2026", regClose: "Dec 05, 2026", coords: [28.5355, 77.3910], prize: "Selection", url: "https://wrestlingfederationofindia.org" },
-                { id: 702, name: "Asian Championship Trials", location: "Sonipat, HR", type: "National", date: "Mar 15, 2026", regClose: "Mar 01, 2026", coords: [28.9931, 77.0151], prize: "India Team", url: "https://wrestlingfederationofindia.org" },
+                { id: 701, name: "Senior National Wrestling", location: "Noida, UP", type: "National", date: "Dec 20, 2026", regClose: "Dec 05, 2026", coords: [28.5355, 77.3910], prize: "Selection", url: "https://wrestlingfederationofindia.org", isElite: true },
+                { id: 702, name: "Asian Championship Trials", location: "Sonipat, HR", type: "National", date: "Mar 15, 2026", regClose: "Mar 01, 2026", coords: [28.9931, 77.0151], prize: "India Team", url: "https://wrestlingfederationofindia.org", isElite: true },
             ],
             Marathon: [
                 { id: 801, name: "Tata Mumbai Marathon", location: "Mumbai, MH", type: "International", date: "Jan 18, 2026", regClose: "Nov 30, 2025", coords: [18.9322, 72.8264], prize: "$405,000", url: "https://tatamumbaimarathon.procam.in/" },
@@ -233,6 +296,7 @@
 
         const TournamentCard = ({ tournament, isActive, onClick }) => {
              const isPast = isEventOver(tournament.date);
+             const buttonText = isPast ? "Event Ended" : (tournament.isElite ? "View Details" : "Register / Info");
              
              return (
                 <div
@@ -252,6 +316,7 @@
                             tournament.type === 'National' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' :
                             tournament.type === 'International' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' :
                             tournament.type === 'State' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
+                            tournament.type === 'District' ? 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300' :
                             'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
                         }`}>
                             {tournament.type}
@@ -297,7 +362,7 @@
                                     : 'bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-700 hover:border-blue-200 dark:hover:border-slate-500 hover:text-blue-600 dark:hover:text-white hover:shadow-sm'
                                 }`}
                     >
-                        <span>{isPast ? "Event Ended" : "Register / Details"}</span>
+                        <span>{buttonText}</span>
                         {!isPast && <Icons.ExternalLink size={10} className="ml-1.5" />}
                     </a>
                 </div>
@@ -344,7 +409,7 @@
             // Sort Tournaments Logic
             const sortedTournaments = useMemo(() => {
                 let data = allSportsData[activeSport];
-                const currentTournaments = allSportsData[activeSport]; // defined for use in Filter counts
+                // const currentTournaments = allSportsData[activeSport]; // defined for use in Filter counts
                 
                 // First filter
                 data = data.filter(t => {
@@ -470,7 +535,7 @@
                                 </div>
                                 ${!isPast ? 
                                 `<a href="${t.url}" target="_blank" class="block w-full !bg-blue-600 dark:!bg-blue-600 !text-white dark:!text-white text-center text-xs font-semibold py-2 rounded-lg hover:opacity-90 transition-opacity">
-                                    Register / Info
+                                    ${t.isElite ? 'View Details' : 'Register / Info'}
                                 </a>` : 
                                 `<div class="block w-full bg-gray-100 dark:bg-slate-800 text-gray-400 dark:text-gray-500 text-center text-xs font-semibold py-2 rounded-lg cursor-not-allowed">
                                     Event Ended
@@ -524,12 +589,12 @@
                             
                             {/* Left Side: Title */}
                             <div className={`flex items-center space-x-2 md:space-x-4 ${isMobileSearchOpen ? 'hidden md:flex' : 'flex'}`}>
-                                <div className="bg-gradient-to-br from-amber-500 to-yellow-600 p-2 md:p-2.5 rounded-xl shadow-lg shadow-amber-200/50 dark:shadow-none text-white ring-1 ring-amber-400/50">
+                                <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-2 md:p-2.5 rounded-xl shadow-lg shadow-blue-200 dark:shadow-none text-white ring-1 ring-blue-400/50">
                                     <Icons.Trophy size={20} className="md:w-6 md:h-6" />
                                 </div>
                                 <div>
                                     <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight font-serif" style={{ fontFamily: '"Playfair Display", serif' }}>
-                                        Tournament Near Me
+                                        Tournaments Map
                                     </h1>
                                     <div className="flex items-center mt-0.5 gap-2">
                                         <span className="text-[9px] md:text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-widest uppercase">{activeSport}</span>
@@ -538,7 +603,7 @@
                                               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                                             </span>
-                                            <span className="text-[9px] md:text-[10px] text-green-600 dark:text-green-400 font-bold tracking-widest uppercase">Live Updates</span>
+                                            <span className="text-[9px] md:text-[10px] text-green-600 dark:text-green-400 font-bold tracking-widest uppercase">Daily Updates</span>
                                         </div>
                                     </div>
                                 </div>
@@ -617,7 +682,7 @@
 
                                 {/* Filters */}
                                 <div className="px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 flex gap-2 overflow-x-auto no-scrollbar transition-colors">
-                                {['All', 'National', 'International', 'District', 'State'].map(f => (
+                                {['All', 'International', 'League', 'National', 'State', 'District'].map(f => (
                                     <FilterButton key={f} label={f} active={filterType === f} onClick={() => setFilterType(f)} 
                                         count={f === 'All' ? currentTournaments.length : currentTournaments.filter(t => t.type === f).length} 
                                         colorClass={f === 'National' ? 'bg-purple-600' : 'bg-blue-600'} />
@@ -690,7 +755,8 @@
                                     <div className="space-y-2">
                                         <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-purple-600 mr-2 shadow-sm ring-1 ring-purple-200 dark:ring-purple-900"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">National</span></div>
                                         <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-orange-600 mr-2 shadow-sm ring-1 ring-orange-200 dark:ring-orange-900"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">International</span></div>
-                                        <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-blue-500 mr-2 shadow-sm ring-1 ring-blue-200 dark:ring-blue-900"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">State / District</span></div>
+                                        <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-blue-500 mr-2 shadow-sm ring-1 ring-blue-200 dark:ring-blue-900"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">State / League</span></div>
+                                        <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-teal-500 mr-2 shadow-sm ring-1 ring-teal-200 dark:ring-teal-900"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">District</span></div>
                                         <div className="flex items-center"><div className="w-3 h-3 rounded-full bg-gray-400 mr-2 shadow-sm ring-1 ring-gray-300 dark:ring-gray-600"></div> <span className="text-slate-600 dark:text-slate-400 font-medium">Past Event</span></div>
                                     </div>
                                 </div>
