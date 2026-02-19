@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    
+    <!-- SEO & App Meta Tags -->
     <title>Tournaments Map</title>
+    <meta name="description" content="Find upcoming Chess, Cricket, Football, and Marathon tournaments across India. Interactive map and calendar for 2026-2027 sports events.">
+    <meta name="theme-color" content="#f8fafc">
     
     <!-- Dynamic Favicon (Trophy Icon - Blue Theme) -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9H4.5a2.5 2.5 0 0 1 0-5H6'/%3E%3Cpath d='M18 9h1.5a2.5 2.5 0 0 0 0-5H18'/%3E%3Cpath d='M4 22h16'/%3E%3Cpath d='M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22'/%3E%3Cpath d='M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22'/%3E%3Cpath d='M18 2H6v7a6 6 0 0 0 12 0V2Z'/%3E%3C/svg%3E" />
@@ -25,10 +29,10 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Fonts -->
+    <!-- Fonts: Inter for UI, Outfit for Modern/Elegant Headers -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -93,11 +97,14 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // Standard React Hook Destructuring (Moved to top level)
+        // Standard React Hook Destructuring
         const { useState, useEffect, useRef, useMemo } = React;
 
         // --- CONSTANTS & DATA ---
         const INDIA_CENTER = [22.5937, 78.9629];
+        
+        // Exact order requested for the sports menu
+        const SPORTS_ORDER = ['Chess', 'Cricket', 'Badminton', 'Marathon', 'Football', 'Kabaddi', 'Wrestling'];
 
         // --- ICONS (Minimalistic SVGs) ---
         const Icons = {
@@ -127,9 +134,6 @@
             Marathon: ({size=20}) => (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 14h5" /><path d="M3 17h4" /><path d="M4 11h3" /><circle cx="16" cy="6" r="2.5" /><path d="M16 9l-3 5" /><path d="M13 14l3 4 3-1" /><path d="M13 14l-3 4" /><path d="M15 10l3 2" /><path d="M15 10l-3 2" /></svg>),
         };
 
-        // ==========================================
-        //  USER CONFIGURATION - EDIT TOURNAMENTS HERE
-        // ==========================================
         const allSportsData = {
             Chess: [
     { id: 101, name: "SNA Seminar & Exam", location: "Ahmedabad, GJ", type: "National", date: "Jan 02, 2026", regClose: "Dec 25, 2025", coords: [23.0225, 72.5714], prize: "Certification", url: "https://aicf.in" },
@@ -242,6 +246,96 @@
     { id: 231, name: "Women's U-19 One Day Trophy", location: "Various, India", type: "National", date: "Predicted to be from Dec 13, 2026 - Jan 01, 2027", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Trophy", url: "https://www.bcci.tv" },
     { id: 232, name: "Vijay Hazare Trophy 2026-27 (Men's ODIs)", location: "Various, India", type: "National", date: "Predicted to be from Dec 20, 2026 - Jan 20, 2027", regClose: "N/A", coords: [20.5937, 78.9629], prize: "Vijay Hazare Trophy", url: "https://www.bcci.tv" }
 ],
+            Badminton: [
+    { id: 101, name: "STARS Adults Badminton Tournament", location: "Chennai, TN", type: "District/Open", date: "Feb 20, 2026", regClose: "Feb 18, 2026", coords: [13.0827, 80.2707], prize: "Trophies/Cash", url: "https://www.playmatches.com" },
+    { id: 102, name: "PowerPlay Badminton", location: "Bengaluru, KA", type: "District/Open", date: "Feb 20, 2026", regClose: "Feb 18, 2026", coords: [12.9716, 77.5946], prize: "Trophies", url: "https://www.playmatches.com" },
+    { id: 103, name: "Lining Champ Kids Badminton Tournament", location: "Chennai, TN", type: "District/Open", date: "Feb 21, 2026", regClose: "Feb 19, 2026", coords: [13.1363, 80.1472], prize: "Kit/Medals", url: "https://www.playmatches.com" },
+    { id: 104, name: "Open State Level Badminton League", location: "Chennai, TN", type: "State/Open", date: "Feb 21, 2026", regClose: "Feb 19, 2026", coords: [12.9915, 80.1415], prize: "Ranking Points", url: "https://www.playmatches.com" },
+    { id: 105, name: "Tamil Nadu Open State Level Tournament", location: "Chennai, TN", type: "State", date: "Feb 21, 2026", regClose: "Feb 18, 2026", coords: [12.9344, 80.1852], prize: "State Honors", url: "https://www.playmatches.com" },
+    { id: 106, name: "Lions Badminton League", location: "Chromepet, TN", type: "District", date: "Feb 21, 2026", regClose: "Feb 19, 2026", coords: [12.9516, 80.1462], prize: "Cash Prize", url: "https://www.playmatches.com" },
+    { id: 107, name: "HSS Inter School Tournament", location: "Poonamallee, TN", type: "District", date: "Feb 21, 2026", regClose: "Feb 19, 2026", coords: [13.0473, 80.0945], prize: "Trophies", url: "https://www.playmatches.com" },
+    { id: 108, name: "Bro Code Feather Shuttle Tournament", location: "Bengaluru, KA", type: "District/Open", date: "Feb 21, 2026", regClose: "Feb 19, 2026", coords: [12.9896, 77.6896], prize: "Trophies", url: "https://www.playmatches.com" },
+    { id: 109, name: "Play Extreme Junior Tournament", location: "Electronic City, KA", type: "District", date: "Feb 21, 2026", regClose: "Feb 19, 2026", coords: [12.8399, 77.6770], prize: "Medals", url: "https://www.playmatches.com" },
+    { id: 110, name: "KBN Badminton Tournament", location: "Ambattur, TN", type: "District/Open", date: "Feb 22, 2026", regClose: "Feb 20, 2026", coords: [13.1143, 80.1548], prize: "Cash Prize", url: "https://www.playmatches.com" },
+    { id: 111, name: "Padukone-PSB Open Junior Tournament", location: "Bengaluru, KA", type: "District", date: "Feb 27, 2026", regClose: "Feb 25, 2026", coords: [12.8399, 77.6770], prize: "Academy Honors", url: "https://www.playmatches.com" },
+    { id: 112, name: "Special Badminton Tournament 2026", location: "Ambattur, TN", type: "District/Open", date: "Feb 28, 2026", regClose: "Feb 25, 2026", coords: [13.0827, 80.2707], prize: "Trophies", url: "https://www.playmatches.com" },
+    { id: 113, name: "Seniors Badminton Tournament", location: "Bengaluru, KA", type: "District/Veteran", date: "Mar 01, 2026", regClose: "Feb 26, 2026", coords: [12.9030, 77.5342], prize: "Trophies", url: "https://www.playmatches.com" },
+    { id: 114, name: "Late Sh KD Passi Masters", location: "Lassara, PB", type: "State", date: "Mar 06, 2026", regClose: "Feb 25, 2026", coords: [31.0267, 75.8236], prize: "Medals", url: "https://www.badmintonindia.org" },
+    { id: 115, name: "48th Indian Masters (Veteran) Nationals", location: "Goa", type: "National", date: "Mar 18, 2026", regClose: "Mar 05, 2026", coords: [15.2993, 74.1240], prize: "National Title", url: "https://www.badmintonindia.org" },
+    { id: 116, name: "Manoj Ramchandran Memorial Open", location: "Mumbai, MH", type: "State", date: "Mar 26, 2026", regClose: "Mar 15, 2026", coords: [19.0760, 72.8777], prize: "Ranking Points", url: "https://www.mbasso.in" },
+    { id: 117, name: "4th Masters WSW Tournament", location: "Chandigarh", type: "District", date: "Apr 17, 2026", regClose: "Apr 10, 2026", coords: [30.7333, 76.7794], prize: "Trophies", url: "https://www.tournamentsoftware.com" },
+    { id: 118, name: "8th Sudama Badminton Cup", location: "Chandigarh", type: "District", date: "Apr 25, 2026", regClose: "Apr 18, 2026", coords: [30.7333, 76.7794], prize: "Cash Prize", url: "https://www.tournamentsoftware.com" },
+    { id: 119, name: "BWF World Championships", location: "New Delhi", type: "International", date: "Aug 17, 2026", regClose: "Jul 15, 2026", coords: [28.6139, 77.2090], prize: "World Title", url: "https://bwfbadminton.com", isElite: true },
+    { id: 120, name: "KOTAK India Junior International Series", location: "Hyderabad, TS", type: "International", date: "Aug 18, 2026", regClose: "Jul 18, 2026", coords: [17.3850, 78.4867], prize: "World Junior Points", url: "https://badmintonasia.org", isElite: true },
+    { id: 121, name: "YONEX SUNRISE India Junior Grand Prix", location: "Pune, MH", type: "International", date: "Aug 25, 2026", regClose: "Jul 25, 2026", coords: [18.5204, 73.8567], prize: "World Junior Points", url: "https://badmintonasia.org", isElite: true },
+    { id: 122, name: "Chhattisgarh India International Challenge", location: "Raipur, CG", type: "International", date: "Oct 27, 2026", regClose: "Sep 27, 2026", coords: [21.2514, 81.6296], prize: "$25,000", url: "https://bwfbadminton.com", isElite: true },
+    { id: 123, name: "Infosys Foundation India International Challenge", location: "Bengaluru, KA", type: "International", date: "Nov 03, 2026", regClose: "Oct 03, 2026", coords: [12.9716, 77.5946], prize: "$25,000", url: "https://bwfbadminton.com", isElite: true },
+    { id: 124, name: "Syed Modi India International (Super 300)", location: "Lucknow, UP", type: "International", date: "Nov 24, 2026", regClose: "Oct 20, 2026", coords: [26.8467, 80.9462], prize: "$150,000", url: "https://bwfbadminton.com", isElite: true },
+    { id: 125, name: "Guwahati Masters (Super 100)", location: "Guwahati, AS", type: "International", date: "Dec 01, 2026", regClose: "Oct 28, 2026", coords: [26.1445, 91.7362], prize: "$100,000", url: "https://bwfbadminton.com", isElite: true },
+    { id: 126, name: "Odisha Masters (Super 100)", location: "Cuttack, OR", type: "International", date: "Dec 08, 2026", regClose: "Nov 04, 2026", coords: [20.4625, 85.8830], prize: "$100,000", url: "https://bwfbadminton.com", isElite: true },
+    { id: 127, name: "Senior National Championship", location: "Guwahati, AS", type: "National", date: "Dec 18, 2026", regClose: "Nov 30, 2026", coords: [26.1445, 91.7362], prize: "National Title", url: "https://www.badmintonindia.org" }
+],
+            Marathon: [
+    { id: 802, name: "Cognizant New Delhi Marathon", location: "New Delhi", type: "International", date: "Feb 22, 2026", regClose: "Feb 15, 2026", coords: [28.6139, 77.2090], prize: "₹20L", url: "https://newdelhimarathon.com/" },
+    { id: 806, name: "TATA Ultra Marathon", location: "Lonavala, MH", type: "National", date: "Feb 22, 2026", regClose: "Feb 10, 2026", coords: [18.7481, 73.4056], prize: "TBD", url: "https://tataultra.com/" },
+    { id: 807, name: "MWC Marathon 2026", location: "Chengalpattu, TN", type: "District", date: "Feb 22, 2026", regClose: "Feb 18, 2026", coords: [12.6841, 79.9836], prize: "N/A", url: "https://myraceindia.com/" },
+    { id: 808, name: "Lokmat Pune Maha Marathon", location: "Pune, MH", type: "State", date: "Feb 22, 2026", regClose: "Feb 15, 2026", coords: [18.5204, 73.8567], prize: "TBD", url: "https://townscript.com/" },
+    { id: 809, name: "Annur Marathon", location: "Annur, TN", type: "District", date: "Feb 22, 2026", regClose: "Feb 18, 2026", coords: [11.2274, 77.1030], prize: "N/A", url: "https://myraceindia.com/" },
+    { id: 810, name: "Times Marathon Chennai", location: "Chennai, TN", type: "State", date: "Feb 22, 2026", regClose: "Feb 15, 2026", coords: [13.0827, 80.2707], prize: "TBD", url: "https://myraceindia.com/" },
+    { id: 811, name: "Rotary Save Soil Marathon", location: "Hyderabad, TG", type: "District", date: "Feb 22, 2026", regClose: "Feb 18, 2026", coords: [17.3850, 78.4867], prize: "N/A", url: "https://ifinish.in/" },
+    { id: 812, name: "Aamra Prabashi Unity Run", location: "Thane, MH", type: "District", date: "Feb 22, 2026", regClose: "Feb 18, 2026", coords: [19.2183, 72.9781], prize: "N/A", url: "https://townscript.com/" },
+    { id: 813, name: "Freshathon Shine India", location: "Hyderabad, TG", type: "District", date: "Feb 22, 2026", regClose: "Feb 18, 2026", coords: [17.3850, 78.4867], prize: "N/A", url: "https://bhaagoindia.com/" },
+    { id: 814, name: "VIKROLITHAN 2026", location: "Mumbai, MH", type: "District", date: "Feb 28, 2026", regClose: "Feb 20, 2026", coords: [19.1136, 72.9277], prize: "TBD", url: "https://indiarunning.com/" },
+    { id: 815, name: "Trail-A-Thon", location: "Gurugram, HR", type: "National", date: "Feb 28, 2026", regClose: "Feb 15, 2026", coords: [28.4595, 77.0266], prize: "TBD", url: "https://indiarunning.com/" },
+    { id: 816, name: "Bombay Gymkhana 10K Run", location: "Mumbai, MH", type: "District", date: "Feb 28, 2026", regClose: "Feb 22, 2026", coords: [18.9322, 72.8264], prize: "N/A", url: "https://indiarunning.com/" },
+    { id: 817, name: "Udaan Utsav 2026", location: "Hyderabad, TG", type: "District", date: "Feb 28, 2026", regClose: "Feb 22, 2026", coords: [17.3850, 78.4867], prize: "N/A", url: "https://ifinish.in/" },
+    { id: 818, name: "SBI Green Marathon", location: "New Delhi", type: "National", date: "Mar 01, 2026", regClose: "Feb 20, 2026", coords: [28.6139, 77.2090], prize: "TBD", url: "https://racesregistrations.com/" },
+    { id: 819, name: "SBI Green Marathon", location: "Chennai, TN", type: "National", date: "Mar 01, 2026", regClose: "Feb 20, 2026", coords: [13.0827, 80.2707], prize: "TBD", url: "https://racesregistrations.com/" },
+    { id: 820, name: "Karnataka State Police Run", location: "Bengaluru, KA", type: "State", date: "Mar 01, 2026", regClose: "Feb 22, 2026", coords: [12.9716, 77.5946], prize: "TBD", url: "https://mysamay.in/" },
+    { id: 821, name: "Nisum Bhubaneswar Marathon", location: "Bhubaneswar, OD", type: "State", date: "Mar 01, 2026", regClose: "Feb 22, 2026", coords: [20.2961, 85.8245], prize: "TBD", url: "https://ifinish.in/" },
+    { id: 822, name: "Kakinada Marathon", location: "Kakinada, AP", type: "District", date: "Mar 01, 2026", regClose: "Feb 22, 2026", coords: [16.9891, 82.2475], prize: "N/A", url: "https://ifinish.in/" },
+    { id: 823, name: "MEPZ Run 2026", location: "Chennai, TN", type: "District", date: "Mar 01, 2026", regClose: "Feb 25, 2026", coords: [12.9279, 80.1416], prize: "N/A", url: "https://myraceindia.com/" },
+    { id: 824, name: "Cubbon Classic 10K", location: "Bengaluru, KA", type: "District", date: "Mar 01, 2026", regClose: "Feb 25, 2026", coords: [12.9769, 77.5946], prize: "N/A", url: "https://bhaagoindia.com/" },
+    { id: 825, name: "Run for a Girl Child", location: "Hyderabad, TG", type: "District", date: "Mar 01, 2026", regClose: "Feb 22, 2026", coords: [17.3850, 78.4867], prize: "N/A", url: "https://ifinish.in/" },
+    { id: 826, name: "Honda Manesar Half Marathon", location: "Gurugram, HR", type: "State", date: "Mar 08, 2026", regClose: "Mar 01, 2026", coords: [28.3515, 76.9428], prize: "TBD", url: "https://townscript.com/" },
+    { id: 827, name: "Medall Run", location: "Chennai, TN", type: "District", date: "Mar 08, 2026", regClose: "Mar 01, 2026", coords: [13.0827, 80.2707], prize: "N/A", url: "https://myraceindia.com/" },
+    { id: 828, name: "Lucknow Heritage Half Marathon", location: "Lucknow, UP", type: "State", date: "Mar 08, 2026", regClose: "Mar 01, 2026", coords: [26.8467, 80.9462], prize: "TBD", url: "https://bhaagoindia.com/" },
+    { id: 829, name: "Pune Twin City Marathon", location: "Pune, MH", type: "District", date: "Mar 08, 2026", regClose: "Mar 01, 2026", coords: [18.6161, 73.7981], prize: "TBD", url: "https://townscript.com/" },
+    { id: 830, name: "Khammam 10K Run", location: "Khammam, TG", type: "District", date: "Mar 08, 2026", regClose: "Mar 01, 2026", coords: [17.2473, 80.1514], prize: "N/A", url: "https://ifinish.in/" },
+    { id: 831, name: "Mindspace Eco Run", location: "Mumbai, MH", type: "District", date: "Mar 08, 2026", regClose: "Mar 01, 2026", coords: [19.1586, 72.9992], prize: "N/A", url: "https://racesregistrations.com/" },
+    { id: 832, name: "MP Half Marathon Mahotsav", location: "Bhopal, MP", type: "State", date: "Mar 15, 2026", regClose: "Mar 05, 2026", coords: [23.2599, 77.4126], prize: "TBD", url: "https://ifinish.in/" },
+    { id: 833, name: "Delhi Heroes Half Marathon", location: "New Delhi", type: "District", date: "Mar 15, 2026", regClose: "Mar 08, 2026", coords: [28.6139, 77.2090], prize: "N/A", url: "https://ifinish.in/" },
+    { id: 834, name: "Pune Nitrrothon 2026", location: "Pune, MH", type: "District", date: "Mar 15, 2026", regClose: "Mar 08, 2026", coords: [18.5204, 73.8567], prize: "N/A", url: "https://bhaagoindia.com/" },
+    { id: 835, name: "Dehradun Ultra Run", location: "Dehradun, UK", type: "State", date: "Mar 15, 2026", regClose: "Mar 05, 2026", coords: [30.3165, 78.0322], prize: "TBD", url: "https://bhaagoindia.com/" },
+    { id: 836, name: "Snow Marathon Lahaul", location: "Lahaul, HP", type: "National", date: "Mar 22, 2026", regClose: "Mar 10, 2026", coords: [32.5397, 77.0299], prize: "TBD", url: "https://ifinish.in/" },
+    { id: 837, name: "SIMS SNRUN 2nd Edition", location: "Chennai, TN", type: "District", date: "Mar 22, 2026", regClose: "Mar 15, 2026", coords: [13.0827, 80.2707], prize: "N/A", url: "https://myraceindia.com/" },
+    { id: 838, name: "Wonder Cement Jaipur Soldierathon", location: "Jaipur, RJ", type: "State", date: "Mar 22, 2026", regClose: "Mar 12, 2026", coords: [26.9124, 75.7873], prize: "TBD", url: "https://ifinish.in/" },
+    { id: 839, name: "Walkaroo Kochi Walkathon", location: "Kochi, KL", type: "State", date: "Mar 29, 2026", regClose: "Mar 20, 2026", coords: [9.9312, 76.2673], prize: "TBD", url: "https://myraceindia.com/" },
+    { id: 840, name: "Surat Trail Marathon", location: "Surat, GJ", type: "State", date: "Mar 29, 2026", regClose: "Mar 20, 2026", coords: [21.1702, 72.8311], prize: "TBD", url: "https://ifinish.in/" },
+    { id: 841, name: "Puravankara 10K Run", location: "Bengaluru, KA", type: "District", date: "Mar 29, 2026", regClose: "Mar 22, 2026", coords: [12.9716, 77.5946], prize: "N/A", url: "https://mysamay.in/" },
+    { id: 842, name: "Kharghar Half Marathon", location: "Navi Mumbai, MH", type: "District", date: "Apr 04, 2026", regClose: "Mar 25, 2026", coords: [19.0330, 73.0699], prize: "TBD", url: "https://indiarunning.com/" },
+    { id: 843, name: "PNB Soldierathon Delhi", location: "New Delhi", type: "National", date: "Apr 05, 2026", regClose: "Mar 25, 2026", coords: [28.6139, 77.2090], prize: "TBD", url: "https://townscript.com/" },
+    { id: 844, name: "Enablethon", location: "Hyderabad, TG", type: "District", date: "Apr 05, 2026", regClose: "Mar 28, 2026", coords: [17.3850, 78.4867], prize: "N/A", url: "https://bhaagoindia.com/" },
+    { id: 845, name: "Kalimpong Ultramarathon", location: "Pedong, WB", type: "State", date: "Apr 24, 2026", regClose: "Apr 10, 2026", coords: [27.1510, 88.6150], prize: "TBD", url: "https://indiarunning.com/" },
+    { id: 846, name: "Farmley Snack Run", location: "New Delhi", type: "District", date: "Apr 25, 2026", regClose: "Apr 18, 2026", coords: [28.6139, 77.2090], prize: "N/A", url: "https://indiarunning.com/" },
+    { id: 803, name: "TCS World 10K", location: "Bengaluru, KA", type: "International", date: "Apr 26, 2026", regClose: "Apr 10, 2026", coords: [12.9716, 77.5946], prize: "$213,000", url: "https://tcsworld10k.procam.in/" },
+    { id: 847, name: "Bharat Ka Bhavishya Shahothon", location: "New Delhi", type: "District", date: "May 09, 2026", regClose: "May 01, 2026", coords: [28.6139, 77.2090], prize: "N/A", url: "https://indiarunning.com/" },
+    { id: 848, name: "Father’s Day Marathon", location: "Chennai, TN", type: "District", date: "Jun 21, 2026", regClose: "Jun 14, 2026", coords: [13.0827, 80.2707], prize: "N/A", url: "https://myraceindia.com/" },
+    { id: 849, name: "Bengaluru 10K Challenge", location: "Bengaluru, KA", type: "State", date: "Jul 05, 2026", regClose: "Jun 25, 2026", coords: [12.9716, 77.5946], prize: "TBD", url: "https://mysamay.in/" },
+    { id: 850, name: "Bangalore Ultra", location: "Bengaluru, KA", type: "National", date: "Jul 26, 2026", regClose: "Jul 15, 2026", coords: [12.9716, 77.5946], prize: "TBD", url: "https://mysamay.in/" },
+    { id: 851, name: "Rotary Rain Run", location: "Goa", type: "State", date: "Jul 26, 2026", regClose: "Jul 15, 2026", coords: [15.2993, 74.1240], prize: "TBD", url: "https://racesregistrations.com/" },
+    { id: 852, name: "Pune Marathon 2026", location: "Pune, MH", type: "State", date: "Aug 02, 2026", regClose: "Jul 20, 2026", coords: [18.5204, 73.8567], prize: "TBD", url: "https://mysamay.in/" },
+    { id: 853, name: "Hyderabad Marathon", location: "Hyderabad, TG", type: "National", date: "Aug 23, 2026 (Approx.)", regClose: "Aug 01, 2026", coords: [17.3850, 78.4867], prize: "TBD", url: "https://nmdchyderabadmarathon.com/" },
+    { id: 854, name: "Mumbai Half Marathon", location: "Mumbai, MH", type: "National", date: "Aug 30, 2026", regClose: "Aug 15, 2026", coords: [18.9322, 72.8264], prize: "TBD", url: "https://mysamay.in/" },
+    { id: 855, name: "Kodagu Monsoon Half Marathon", location: "Coorg, KA", type: "State", date: "Sep 06, 2026", regClose: "Aug 25, 2026", coords: [12.3375, 75.8069], prize: "TBD", url: "https://mysamay.in/" },
+    { id: 856, name: "Ladakh Marathon", location: "Leh, Ladakh", type: "International", date: "Sep 10, 2026", regClose: "Aug 01, 2026", coords: [34.1526, 77.5771], prize: "TBD", url: "https://ladakhmarathon.com/" },
+    { id: 804, name: "Vedanta Delhi Half Marathon", location: "New Delhi", type: "International", date: "Oct 18, 2026 (Approx.)", regClose: "Sep 20, 2026", coords: [28.5828, 77.2344], prize: "$268,000", url: "https://vedantadelhihalfmarathon.procam.in/" },
+    { id: 857, name: "Adani Ahmedabad Marathon", location: "Ahmedabad, GJ", type: "National", date: "Nov 29, 2026 (Approx.)", regClose: "Nov 10, 2026", coords: [23.0225, 72.5714], prize: "TBD", url: "https://ahmedabadmarathon.com/" },
+    { id: 858, name: "Vasai-Virar Mayor's Marathon", location: "Virar, MH", type: "State", date: "Dec 13, 2026 (Approx.)", regClose: "Nov 25, 2026", coords: [19.4564, 72.7925], prize: "TBD", url: "https://vvmm.in/" },
+    { id: 859, name: "Thump! Celebration Run", location: "Bengaluru, KA", type: "District", date: "Dec 13, 2026", regClose: "Dec 01, 2026", coords: [12.9716, 77.5946], prize: "N/A", url: "https://mysamay.in/" },
+    { id: 805, name: "Tata Steel Kolkata 25K", location: "Kolkata, WB", type: "International", date: "Dec 20, 2026 (Approx.)", regClose: "Nov 15, 2026", coords: [22.5626, 88.3630], prize: "$100,000", url: "https://tatasteelkolkata25k.procam.in/" },
+    { id: 860, name: "Goa River Marathon", location: "Vasco da Gama, Goa", type: "National", date: "Dec 27, 2026 (Approx.)", regClose: "Dec 10, 2026", coords: [15.3970, 73.8122], prize: "TBD", url: "https://goarivermarathon.com/" }
+],
             Football: [
     { id: 305, name: "India Cup 2026", location: "Bangalore, KA", type: "Youth International", date: "Feb 20, 2026", regClose: "Feb 10, 2026", coords: [12.9716, 77.5946], prize: "Youth Cup", url: "https://www.sporthood.in" },
     { id: 306, name: "Indian Football League (IFL)", location: "Aizawl, MZ", type: "League", date: "Feb 27, 2026", regClose: "Feb 15, 2026", coords: [23.7271, 92.7176], prize: "IFL Title", url: "https://www.the-aiff.com" },
@@ -285,27 +379,23 @@
     { id: 414, name: "52nd Junior National (Girls)", location: "Kolkata, WB", type: "National", date: "Dec 20, 2026", regClose: "Dec 05, 2026", coords: [22.5726, 88.3639], prize: "Junior Title", url: "https://indiankabaddi.org" },
     { id: 403, name: "PKL Playoffs", location: "Pune, MH", type: "League", date: "Dec 28, 2026", regClose: "Dec 20, 2026", coords: [18.5204, 73.8567], prize: "Semi-Finals", url: "https://www.prokabaddi.com" }
 ],
-            Badminton: [
-                { id: 501, name: "India Open (Super 750)", location: "New Delhi", type: "International", date: "Jan 14, 2027", regClose: "Dec 15, 2026", coords: [28.5677, 77.2433], prize: "$850,000", url: "https://bwfbadminton.com", isElite: true },
-                { id: 502, name: "Syed Modi International", location: "Lucknow, UP", type: "International", date: "Nov 26, 2026", regClose: "Oct 20, 2026", coords: [26.8467, 80.9462], prize: "$150,000", url: "https://bwfbadminton.com", isElite: true },
-                { id: 503, name: "Senior National Champ", location: "Guwahati, AS", type: "National", date: "Dec 18, 2026", regClose: "Nov 30, 2026", coords: [26.1445, 91.7362], prize: "National Title", url: "https://www.badmintonindia.org" },
-            ],
-            Tennis: [
-                { id: 601, name: "Tata Open Maharashtra", location: "Pune, MH", type: "International", date: "Feb 02, 2026", regClose: "Jan 10, 2026", coords: [18.5590, 73.7868], prize: "ATP 250", url: "https://www.maharashtraopen.com", isElite: true },
-                { id: 602, name: "Bangalore Challenger", location: "Bangalore, KA", type: "International", date: "Feb 12, 2026", regClose: "Jan 20, 2026", coords: [12.9716, 77.5946], prize: "ATP Challenger", url: "https://www.atptour.com", isElite: true },
-                { id: 603, name: "Fenesta Nationals", location: "New Delhi", type: "National", date: "Oct 05, 2026", regClose: "Sep 15, 2026", coords: [28.5562, 77.1970], prize: "Hard Court", url: "https://www.aitatennis.com", isElite: true },
-            ],
             Wrestling: [
-                { id: 701, name: "Senior National Wrestling", location: "Noida, UP", type: "National", date: "Dec 20, 2026", regClose: "Dec 05, 2026", coords: [28.5355, 77.3910], prize: "Selection", url: "https://wrestlingfederationofindia.org", isElite: true },
-                { id: 702, name: "Asian Championship Trials", location: "Sonipat, HR", type: "National", date: "Mar 15, 2026", regClose: "Mar 01, 2026", coords: [28.9931, 77.0151], prize: "India Team", url: "https://wrestlingfederationofindia.org", isElite: true },
-            ],
-            Marathon: [
-                { id: 801, name: "Tata Mumbai Marathon", location: "Mumbai, MH", type: "International", date: "Jan 18, 2026", regClose: "Nov 30, 2025", coords: [18.9322, 72.8264], prize: "$405,000", url: "https://tatamumbaimarathon.procam.in/" },
-                { id: 802, name: "New Delhi Marathon", location: "New Delhi", type: "National", date: "Feb 22, 2026", regClose: "Jan 15, 2026", coords: [28.6139, 77.2090], prize: "₹20L", url: "https://newdelhimarathon.com/" },
-                { id: 803, name: "TCS World 10K", location: "Bangalore, KA", type: "International", date: "May 17, 2026", regClose: "Apr 20, 2026", coords: [12.9716, 77.5946], prize: "$213,000", url: "https://tcsworld10k.procam.in/" },
-                { id: 804, name: "Vedanta Delhi Half Marathon", location: "New Delhi", type: "International", date: "Oct 18, 2026", regClose: "Sep 20, 2026", coords: [28.5828, 77.2344], prize: "$268,000", url: "https://vedantadelhihalfmarathon.procam.in/" },
-                { id: 805, name: "Tata Steel Kolkata 25K", location: "Kolkata, WB", type: "International", date: "Dec 20, 2026", regClose: "Nov 15, 2026", coords: [22.5626, 88.3630], prize: "$100,000", url: "https://tatasteelkolkata25k.procam.in/" },
-            ]
+    { id: 1, name: "All-India Inter-University Beach Wrestling", location: "Chennai, TN", type: "National University", date: "Feb 22, 2026", regClose: "Feb 10, 2026", coords: [12.8236, 80.2235], prize: "University Ranking", url: "https://aiu.ac.in", isElite: false },
+    { id: 2, name: "All-India Beach Wrestling Championship", location: "Chennai, TN", type: "National", date: "Mar 07, 2026", regClose: "Feb 25, 2026", coords: [12.8236, 80.2235], prize: "National Title", url: "https://wrestlingfederationofindia.org", isElite: true },
+    { id: 3, name: "All-India Inter-University Wrestling F/S & G/R (Men)", location: "Chandigarh, CH", type: "National University", date: "Mar 10, 2026", regClose: "Feb 28, 2026", coords: [30.7333, 76.7794], prize: "University Ranking", url: "https://aiu.ac.in", isElite: false },
+    { id: 4, name: "Asian Championship Selection Trials", location: "Sonipat, HR", type: "National Trials", date: "Mar 15, 2026 (Approx)", regClose: "Mar 01, 2026", coords: [28.9931, 77.0151], prize: "India Team Selection", url: "https://wrestlingfederationofindia.org", isElite: true },
+    { id: 5, name: "All-India Inter-University Wrestling F/S (Women)", location: "Kota, RJ", type: "National University", date: "Mar 16, 2026", regClose: "Mar 02, 2026", coords: [25.1825, 75.8391], prize: "University Ranking", url: "https://aiu.ac.in", isElite: false },
+    { id: 6, name: "WFI U-17 & U-23 National Wrestling Championships", location: "TBD, India", type: "National Youth", date: "Jul 15, 2026 (Approx)", regClose: "Jun 15, 2026", coords: [20.5937, 78.9629], prize: "National Medals", url: "https://wrestlingfederationofindia.org", isElite: false },
+    { id: 7, name: "Monsoon Dangals & Local Akhada Tournaments", location: "North India (HR/PB/UP)", type: "Local / Village", date: "Aug 01, 2026 (Approx)", regClose: "Walk-in / Invite", coords: [29.0588, 76.0856], prize: "Cash / Royal Enfield", url: "Offline / Local News", isElite: false },
+    { id: 8, name: "Salem District Selection Trials", location: "Salem, TN", type: "District", date: "Aug 20, 2026 (Approx)", regClose: "Aug 10, 2026", coords: [11.6643, 78.1460], prize: "State Qualification", url: "Offline / Local News", isElite: false },
+    { id: 9, name: "All-India District Selection Trials (Other Districts)", location: "Nationwide", type: "District", date: "Aug 20, 2026 (Approx)", regClose: "Varies Locally", coords: [20.5937, 78.9629], prize: "State Qualification", url: "Offline / Local News", isElite: false },
+    { id: 10, name: "WFI U-20 Junior National Wrestling Championship", location: "TBD, India", type: "National Junior", date: "Sep 10, 2026 (Approx)", regClose: "Aug 10, 2026", coords: [20.5937, 78.9629], prize: "National Medals", url: "https://wrestlingfederationofindia.org", isElite: false },
+    { id: 11, name: "Tamil Nadu State Wrestling Championship", location: "Chennai, TN (Approx)", type: "State", date: "Sep 25, 2026 (Approx)", regClose: "Sep 10, 2026", coords: [13.0827, 80.2707], prize: "National Qualification", url: "Offline", isElite: false },
+    { id: 12, name: "All-India State Wrestling Championships (Other States)", location: "Nationwide", type: "State", date: "Sep 25, 2026 (Approx)", regClose: "Varies Locally", coords: [20.5937, 78.9629], prize: "National Qualification", url: "Offline", isElite: false },
+    { id: 13, name: "69th/70th National School Games (SGFI)", location: "Nationwide", type: "National School", date: "Oct 15, 2026 (Approx)", regClose: "Sep 30, 2026", coords: [20.5937, 78.9629], prize: "School Medals", url: "https://sgfi.org.in", isElite: false },
+    { id: 14, name: "Festive Dangals (Diwali Season)", location: "Nationwide Rural", type: "Local / Village", date: "Nov 08, 2026 (Approx)", regClose: "Walk-in / Invite", coords: [20.5937, 78.9629], prize: "Cash / Tractors", url: "Offline", isElite: false },
+    { id: 15, name: "Tata Motors Senior National Wrestling Championship", location: "Noida, UP (Expected)", type: "National", date: "Nov 25, 2026 (Approx)", regClose: "Nov 05, 2026", coords: [28.5355, 77.3910], prize: "National Title / Selection", url: "https://wrestlingfederationofindia.org", isElite: true }
+],
         };
 
         // Helper for distance calculation (Haversine Formula)
@@ -343,7 +433,7 @@
 
         const SportSelector = ({ current, onSelect }) => (
             <div className="flex overflow-x-auto no-scrollbar space-x-2 p-2 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20">
-                {Object.keys(allSportsData).map(sport => {
+                {SPORTS_ORDER.map(sport => {
                     const Icon = Icons[sport];
                     const isActive = current === sport;
                     return (
@@ -477,19 +567,21 @@
             // Sort Tournaments Logic
             const sortedTournaments = useMemo(() => {
                 let data = allSportsData[activeSport];
-                // const currentTournaments = allSportsData[activeSport]; // defined for use in Filter counts
                 
                 // First filter
                 data = data.filter(t => {
                     const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                                           t.location.toLowerCase().includes(searchTerm.toLowerCase());
+                    const isPast = isEventOver(t.date);
                     
+                    // If "Ended" is selected, ONLY show past events
                     if (filterType === 'Ended') {
-                        return isEventOver(t.date) && matchesSearch;
+                        return isPast && matchesSearch;
                     }
 
+                    // Otherwise, HIDE past events and match category
                     const matchesType = (filterType === 'All' || t.type === filterType);
-                    return matchesType && matchesSearch;
+                    return !isPast && matchesType && matchesSearch;
                 });
 
                 // Then calculate distance and sort if user location is known
@@ -503,8 +595,10 @@
                 return data;
             }, [activeSport, filterType, searchTerm, userLocation]);
 
-            // Need this for the counts in the filter buttons
-            const currentTournaments = allSportsData[activeSport]; 
+            // Need this for the counts in the filter buttons (Calculates counts excluding past events)
+            const currentTournaments = useMemo(() => {
+                return allSportsData[activeSport].filter(t => !isEventOver(t.date));
+            }, [activeSport]);
 
 
             // Leaflet Map Resize Fix for Mobile when switching views
@@ -560,7 +654,7 @@
 
                 sortedTournaments.forEach(t => {
                     const isPast = isEventOver(t.date);
-                    const color = isPast ? '#94a3b8' : (t.type === 'National' ? '#9333ea' : t.type === 'International' ? '#ea580c' : '#3b82f6');
+                    const color = isPast ? '#94a3b8' : (t.type === 'National' ? '#9333ea' : t.type === 'International' ? '#ea580c' : t.type === 'District' ? '#14b8a6' : '#3b82f6');
                     const svg = `
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${color}" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0px 2px 2px rgba(0,0,0,0.3))" style="${isPast ? 'opacity: 0.7;' : ''}">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -580,7 +674,7 @@
                         .bindPopup(`
                             <div class="group p-4 w-full">
                                 <div class="flex items-center justify-start gap-2 mb-2 pr-6">
-                                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${t.type === 'National' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : t.type === 'International' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${t.type === 'National' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300' : t.type === 'International' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300' : t.type === 'District' ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'}">
                                         ${t.type}
                                     </span>
                                     ${isPast ? '<span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-300">Ended</span>' : ''}
@@ -661,7 +755,7 @@
                                     <Icons.Trophy size={20} className="md:w-6 md:h-6" />
                                 </div>
                                 <div>
-                                    <h1 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight font-serif" style={{ fontFamily: '"Playfair Display", serif' }}>
+                                    <h1 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white leading-tight" style={{ fontFamily: '"Outfit", sans-serif', letterSpacing: '-0.02em' }}>
                                         Tournaments Map
                                     </h1>
                                     <div className="flex items-center mt-0.5 gap-2">
@@ -851,5 +945,3 @@
     </script>
 </body>
 </html>
-
-
