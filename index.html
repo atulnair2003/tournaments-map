@@ -132,14 +132,36 @@
         // ==========================================
         const allSportsData = {
             Chess: [
-                { id: 101, name: "Playu International Open", location: "Chennai, TN", type: "International", date: "Feb 15, 2026", regClose: "Feb 10, 2026", coords: [13.0827, 80.2707], prize: "₹3L", url: "https://aicf.in" },
-                { id: 102, name: "National Senior Champ", location: "Lucknow, UP", type: "National", date: "Aug 16, 2026", regClose: "Aug 01, 2026", coords: [26.8467, 80.9462], prize: "Title", url: "https://aicf.in" },
-                { id: 103, name: "Mumbai Mayor's Cup", location: "Mumbai, MH", type: "International", date: "May 02, 2026", regClose: "Apr 25, 2026", coords: [19.0760, 72.8777], prize: "₹30L", url: "https://mumbaicitychess.com" },
-                { id: 104, name: "Delhi International", location: "New Delhi", type: "International", date: "Jan 09, 2027", regClose: "Dec 31, 2026", coords: [28.6139, 77.2090], prize: "₹1.1Cr", url: "https://delhichess.com" },
-                { id: 105, name: "National U-9", location: "Jamshedpur, JH", type: "National", date: "Jul 05, 2026", regClose: "Jun 20, 2026", coords: [22.8046, 86.2029], prize: "Title", url: "https://aicf.in" },
-                { id: 106, name: "TN State U-7", location: "Coimbatore, TN", type: "State", date: "Apr 04, 2026", regClose: "Mar 28, 2026", coords: [11.0168, 76.9558], prize: "State Title", url: "https://tamilnaduchess.com" },
-                { id: 107, name: "Chennai District Selection", location: "Chennai, TN", type: "District", date: "Jan 24, 2027", regClose: "Jan 20, 2027", coords: [13.0827, 80.2707], prize: "Selection", url: "https://chennaidistrictchess.com/" },
-            ],
+    { id: 1, name: "Tata Steel India Rapid", location: "Kolkata, WB", type: "International", date: "Jan 07, 2026", regClose: "Dec 30, 2025", coords: [22.5726, 88.3639], prize: "₹20L+", url: "https://aicf.in" },
+    { id: 2, name: "Tata Steel India Blitz", location: "Kolkata, WB", type: "International", date: "Jan 10, 2026", regClose: "Jan 05, 2026", coords: [22.5726, 88.3639], prize: "₹10L+", url: "https://aicf.in" },
+    { id: 3, name: "International Rating Chess Fiesta", location: "Jammu, JK", type: "International", date: "Jan 26, 2026", regClose: "Jan 20, 2026", coords: [32.7330, 74.8570], prize: "₹5L", url: "https://aicf.in" },
+    { id: 4, name: "Chola International GM Tournament", location: "Chennai, TN", type: "International", date: "Feb 02, 2026", regClose: "Jan 25, 2026", coords: [13.0827, 80.2707], prize: "GM Norms", url: "https://aicf.in" },
+    { id: 5, name: "Akshaya Institutions 4th Intl", location: "Coimbatore, TN", type: "International", date: "Feb 13, 2026", regClose: "Feb 08, 2026", coords: [11.0168, 76.9558], prize: "₹2.5L", url: "https://chessfee.com" },
+    { id: 6, name: "Playu International Open", location: "Chennai, TN", type: "International", date: "Feb 15, 2026", regClose: "Feb 10, 2026", coords: [13.0827, 80.2707], prize: "₹3L", url: "https://chessfee.com" },
+    { id: 7, name: "Dharmapuri Thagadur Trophy", location: "Dharmapuri, TN", type: "International", date: "Feb 20, 2026", regClose: "Feb 15, 2026", coords: [12.1273, 78.1582], prize: "₹5L", url: "https://chessfee.com" },
+    { id: 8, name: "Chennai District Selection", location: "Chennai, TN", type: "District", date: "Feb 21, 2026", regClose: "Feb 18, 2026", coords: [13.0827, 80.2707], prize: "Selection", url: "https://chennaidistrictchess.com" },
+    { id: 9, name: "Nagpur District U-13 Selection", location: "Nagpur, MH", type: "District", date: "Feb 22, 2026", regClose: "Feb 19, 2026", coords: [21.1458, 79.0882], prize: "Selection", url: "https://aicf.in" },
+    { id: 10, name: "National Amateur Champ 2025-26", location: "Hosur, TN", type: "National", date: "Feb 25, 2026", regClose: "Feb 10, 2026", coords: [12.7409, 77.8253], prize: "Title", url: "https://aicf.in" },
+    { id: 11, name: "Little England FIDE Rated Blitz", location: "Krishnagiri, TN", type: "International", date: "Mar 01, 2026", regClose: "Feb 24, 2026", coords: [12.5186, 78.2137], prize: "₹1L", url: "https://chessfee.com" },
+    { id: 12, name: "National Rapid & Blitz 2025-26", location: "Ranchi, JH", type: "National", date: "Mar 11, 2026", regClose: "Mar 01, 2026", coords: [23.3441, 85.3096], prize: "Title", url: "https://aicf.in" },
+    { id: 13, name: "National Team Champ 2025-26", location: "Raipur, CG", type: "National", date: "Mar 16, 2026", regClose: "Mar 05, 2026", coords: [21.2514, 81.6296], prize: "Title", url: "https://aicf.in" },
+    { id: 14, name: "National Under-17 2025-26", location: "Ahmedabad, GJ", type: "National", date: "Mar 30, 2026", regClose: "Mar 15, 2026", coords: [23.0225, 72.5714], prize: "Title", url: "https://aicf.in" },
+    { id: 15, name: "TN State U-7", location: "Coimbatore, TN", type: "State", date: "Apr 04, 2026", regClose: "Mar 28, 2026", coords: [11.0168, 76.9558], prize: "State Title", url: "https://tamilnaduchess.com" },
+    { id: 16, name: "Mumbai Mayor's Cup", location: "Mumbai, MH", type: "International", date: "May 02, 2026", regClose: "Apr 25, 2026", coords: [19.0760, 72.8777], prize: "₹30L", url: "https://mumbaicitychess.com" },
+    { id: 17, name: "National Under-7", location: "Maharashtra", type: "National", date: "Jun 07, 2026", regClose: "May 25, 2026", coords: [19.7515, 75.7139], prize: "Title", url: "https://aicf.in" },
+    { id: 18, name: "National Under-9", location: "Jamshedpur, JH", type: "National", date: "Jul 05, 2026", regClose: "Jun 20, 2026", coords: [22.8046, 86.2029], prize: "Title", url: "https://aicf.in" },
+    { id: 19, name: "National Under-11", location: "Karnataka", type: "National", date: "Aug 02, 2026", regClose: "Jul 15, 2026", coords: [15.3173, 75.7139], prize: "Title", url: "https://aicf.in" },
+    { id: 20, name: "National Senior Champ", location: "Lucknow, UP", type: "National", date: "Aug 16, 2026", regClose: "Aug 01, 2026", coords: [26.8467, 80.9462], prize: "Title", url: "https://aicf.in" },
+    { id: 21, name: "National Under-13", location: "Pondicherry", type: "National", date: "Sep 03, 2026", regClose: "Aug 20, 2026", coords: [11.9416, 79.8083], prize: "Title", url: "https://aicf.in" },
+    { id: 22, name: "National Under-15", location: "Punjab", type: "National", date: "Sep 14, 2026", regClose: "Sep 01, 2026", coords: [31.1471, 75.3412], prize: "Title", url: "https://aicf.in" },
+    { id: 23, name: "National Under-17", location: "Jammu, JK", type: "National", date: "Sep 28, 2026", regClose: "Sep 15, 2026", coords: [32.7330, 74.8570], prize: "Title", url: "https://aicf.in" },
+    { id: 24, name: "National School Team (U12/U18)", location: "Andhra Pradesh", type: "National", date: "Oct 10, 2026", regClose: "Sep 30, 2026", coords: [15.9129, 79.7400], prize: "Title", url: "https://aicf.in" },
+    { id: 25, name: "National Under-19", location: "West Bengal", type: "National", date: "Oct 27, 2026", regClose: "Oct 15, 2026", coords: [22.9868, 87.8550], prize: "Title", url: "https://aicf.in" },
+    { id: 26, name: "National Women Championship", location: "Telangana", type: "National", date: "Nov 18, 2026", regClose: "Nov 05, 2026", coords: [18.1124, 79.0193], prize: "Title", url: "https://aicf.in" },
+    { id: 27, name: "National Amateur Champ", location: "Assam", type: "National", date: "Dec 02, 2026", regClose: "Nov 20, 2026", coords: [26.2006, 92.9376], prize: "Title", url: "https://aicf.in" },
+    { id: 28, name: "National Rapid & Blitz", location: "Tamil Nadu", type: "National", date: "Dec 12, 2026", regClose: "Dec 01, 2026", coords: [11.1271, 78.6569], prize: "Title", url: "https://aicf.in" },
+    { id: 29, name: "National School Championship", location: "Gujarat", type: "National", date: "Dec 17, 2026", regClose: "Dec 05, 2026", coords: [22.2587, 71.1924], prize: "Title", url: "https://aicf.in" }
+],
             Cricket: [
     { id: 201, name: "India vs Netherlands (T20 WC)", location: "Ahmedabad, GJ", type: "International", date: "Feb 18, 2026", regClose: "Sold Out", coords: [23.0904, 72.5975], prize: "Points", url: "https://www.icc-cricket.com" },
     { id: 202, name: "IND vs ENG Test", location: "Chennai, TN", type: "International", date: "Feb 20, 2026", regClose: "Feb 18, 2026", coords: [13.0630, 80.2825], prize: "Bilateral", url: "https://www.bcci.tv" },
@@ -783,3 +805,4 @@
     </script>
 </body>
 </html>
+
